@@ -34,145 +34,145 @@
     },
     "activationEvents": [
         "*",
-        "onView:inlineBookmarksExplorer",
-        "onCommand:inlineBookmarks.jumpToRange",
-        "onCommand:inlineBookmarks.refresh",
-        "onCommand:inlineBookmarks.toggleShowVisibleFilesOnly",
-        "onCommand:inlineBookmarks.toggleViewKeepFilesExpanded",
-        "onCommand:inlineBookmarks.debug.state.reset",
-        "onCommand:inlineBookmarks.showSelectBookmark",
-        "onCommand:inlineBookmarks.showSelectVisibleBookmark",
-        "onCommand:inlineBookmarks.listBookmarks",
-        "onCommand:inlineBookmarks.listVisibleBookmarks",
-        "onCommand:inlineBookmarks.scanWorkspace"
+        "onView:stickyBookmarksExplorer",
+        "onCommand:stickyBookmarks.jumpToRange",
+        "onCommand:stickyBookmarks.refresh",
+        "onCommand:stickyBookmarks.toggleShowVisibleFilesOnly",
+        "onCommand:stickyBookmarks.toggleViewKeepFilesExpanded",
+        "onCommand:stickyBookmarks.debug.state.reset",
+        "onCommand:stickyBookmarks.showSelectBookmark",
+        "onCommand:stickyBookmarks.showSelectVisibleBookmark",
+        "onCommand:stickyBookmarks.listBookmarks",
+        "onCommand:stickyBookmarks.listVisibleBookmarks",
+        "onCommand:stickyBookmarks.scanWorkspace"
     ],
     "main": "./src/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "inlineBookmarks.refresh",
+                "command": "stickyBookmarks.refresh",
                 "title": "Quick-Refresh View",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/refresh-light.svg",
                     "dark": "images/refresh-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.toggleShowVisibleFilesOnly",
+                "command": "stickyBookmarks.toggleShowVisibleFilesOnly",
                 "title": "Toggle: Show Bookmarks for Visible Editors / All Files",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/toggle-files-light.svg",
                     "dark": "images/toggle-files-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.toggleViewKeepFilesExpanded",
+                "command": "stickyBookmarks.toggleViewKeepFilesExpanded",
                 "title": "Toggle: Keep File View expanded",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": "images/toggle-expanded.svg"
             },
             {
-                "command": "inlineBookmarks.jumpToPrevious",
+                "command": "stickyBookmarks.jumpToPrevious",
                 "title": "Jump to Previous",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/jump-previous.svg",
                     "dark": "images/jump-previous-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.jumpToNext",
+                "command": "stickyBookmarks.jumpToNext",
                 "title": "Jump to Next",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/jump-next.svg",
                     "dark": "images/jump-next-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.setTreeViewFilterWords",
+                "command": "stickyBookmarks.setTreeViewFilterWords",
                 "title": "Filter View ...",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/filter-light.svg",
                     "dark": "images/filter-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.showSelectBookmark",
+                "command": "stickyBookmarks.showSelectBookmark",
                 "title": "Select Bookmark",
-                "category": "InlineBookmarks"
+                "category": "StickyBookmarks"
             },
             {
-                "command": "inlineBookmarks.showSelectVisibleBookmark",
+                "command": "stickyBookmarks.showSelectVisibleBookmark",
                 "title": "Select Visible Bookmark",
-                "category": "InlineBookmarks"
+                "category": "StickyBookmarks"
             },
             {
-                "command": "inlineBookmarks.listBookmarks",
+                "command": "stickyBookmarks.listBookmarks",
                 "title": "List Bookmarks",
-                "category": "InlineBookmarks"
+                "category": "StickyBookmarks"
             },
             {
-                "command": "inlineBookmarks.listVisibleBookmarks",
+                "command": "stickyBookmarks.listVisibleBookmarks",
                 "title": "List Visible Bookmarks",
-                "category": "InlineBookmarks"
+                "category": "StickyBookmarks"
             },
             {
-                "command": "inlineBookmarks.scanWorkspace",
+                "command": "stickyBookmarks.scanWorkspace",
                 "title": "Scan Workspace for Bookmarks",
-                "category": "InlineBookmarks",
+                "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/scan-workspace.svg",
                     "dark": "images/scan-workspace-dark.svg"
                 }
             },
             {
-                "command": "inlineBookmarks.debug.state.reset",
+                "command": "stickyBookmarks.debug.state.reset",
                 "title": "Reset the internal state to fix potential problems",
-                "category": "InlineBookmarks:Debug"
+                "category": "StickyBookmarks:Debug"
             }
         ],
         "views": {
             "explorer": [
                 {
-                    "id": "inlineBookmarksExplorer",
-                    "name": "📘 Inline Bookmarks"
+                    "id": "stickyBookmarksExplorer",
+                    "name": "📘 Sticky Bookmarks"
                 }
             ]
         },
         "menus": {
             "view/title": [
                 {
-                    "command": "inlineBookmarks.jumpToPrevious",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.jumpToPrevious",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "inlineBookmarks.jumpToNext",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.jumpToNext",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "inlineBookmarks.setTreeViewFilterWords",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.setTreeViewFilterWords",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@3"
                 },
                 {
-                    "command": "inlineBookmarks.toggleShowVisibleFilesOnly",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.toggleShowVisibleFilesOnly",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@4"
                 },
                 {
-                    "command": "inlineBookmarks.refresh",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.refresh",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@5"
                 },
                 {
-                    "command": "inlineBookmarks.scanWorkspace",
-                    "when": "view == inlineBookmarksExplorer",
+                    "command": "stickyBookmarks.scanWorkspace",
+                    "when": "view == stickyBookmarksExplorer",
                     "group": "navigation@6"
                 }
             ]
@@ -347,6 +347,6 @@
     },
     "dependencies": {
         "ignore": "^5.2.0",
-        "vscode-uri": "^3.0.3"
+        "vscode-uri": "^3.1.0"
     }
 }

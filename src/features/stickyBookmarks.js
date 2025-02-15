@@ -1,17 +1,17 @@
 'use strict';
 /** 
- * @author github.com/tintinweb
+ * @author github.com/mark-hahn
  *  
  * 
  * 
  * */
 /** imports */
-const vscode = require('vscode');
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
+const vscode   = require('vscode');
+const fs       = require("fs");
+const path     = require("path");
+const crypto   = require("crypto");
 const settings = require('../settings');
-const os = require("os");
+const os       = require("os");
 
 class Commands {
     constructor(controller) {
@@ -50,7 +50,7 @@ class Commands {
         }, this);
 
         vscode.window.showQuickPick(entries, { placeHolder: placeHolder || 'Select bookmarks' }).then(item => {
-            vscode.commands.executeCommand("inlineBookmarks.jumpToRange", item.target.uri, item.target.range);
+            vscode.commands.executeCommand("stickyBookmarks.jumpToRange", item.target.uri, item.target.range);
         });
     }
 
@@ -62,7 +62,8 @@ class Commands {
     showListBookmarks(filter) {
 
         if (!vscode.window.outputChannel) {
-            vscode.window.outputChannel = vscode.window.createOutputChannel('inlineBookmarks');
+            vscode.window.outputChannel = 
+              vscode.window.createOutputChannel('stickyBookmarks');
         }
 
         if (!vscode.window.outputChannel) return;
@@ -157,7 +158,7 @@ class Commands {
 
 }
 
-class InlineBookmarksCtrl {
+class StickyBookmarksCtrl {
 
     constructor(context) {
         this.context = context;
@@ -177,24 +178,36 @@ class InlineBookmarksCtrl {
     }
 
     async decorate(editor) {
-        if (!editor || !editor.document /*|| editor.document.fileName.startsWith("extension-output-")*/) return; //decorate list of inline comments
+        if (!editor || !editor.document || 
+             editor.document.fileName.toLowerCase().endsWith(".json") 
+                /*|| editor.document.fileName.
+                     startsWith("extension-output-")*/) return; 
+                //decorate list of inline comments
 
         this._clearBookmarksOfFile(editor.document);
 
         if (this._extensionIsBlacklisted(editor.document.fileName)) return;
 
         for (var style in this.words) {
-            if (!this.words.hasOwnProperty(style) || this.words[style].length == 0 || this._wordIsOnIgnoreList(this.words[style])) {
-                continue;
+            if (!this.words.hasOwnProperty(style) || 
+                 this.words[style].length == 0    || 
+                 this._wordIsOnIgnoreList(this.words[style])) {
+              continue;
             }
-            this._decorateWords(editor, this.words[style], style, editor.document.fileName.startsWith("extension-output-")); //dont add to bookmarks if we're decorating an extension-output
+            this._decorateWords(editor, this.words[style], style, 
+                    editor.document.fileName.startsWith("extension-output-")); 
+                    //don't add to bookmarks if we're decorating an 
+                    //extension-output
         }
 
         this.saveToWorkspace(); //update workspace
     }
 
     async updateBookmarks(document) {
-        if (!document || document.fileName.startsWith("extension-output-")) return;
+        if (!document || 
+             document.fileName.startsWith("extension-output-") || 
+             document.fileName.toLowerCase().endsWith(".json")) 
+          return;
 
         this._clearBookmarksOfFile(document);
 
@@ -417,7 +430,7 @@ const NodeType = {
 };
 
 
-class InlineBookmarksDataModel {
+class StickyBookmarksDataModel {
 
     /** treedata model */
 
@@ -518,14 +531,14 @@ class InlineBookmarksDataModel {
 
 }
 
-class InlineBookmarkTreeDataProvider {
+class StickyBookmarkTreeDataProvider {
 
-    constructor(inlineBookmarksController) {
+    constructor(stickyBookmarksController) {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
 
-        this.controller = inlineBookmarksController;
-        this.model = new InlineBookmarksDataModel(inlineBookmarksController);
+        this.controller = stickyBookmarksController;
+        this.model = new StickyBookmarksDataModel(stickyBookmarksController);
 
         this.filterTreeViewWords = [];
         this.gitIgnoreHandler = undefined;
@@ -555,7 +568,7 @@ class InlineBookmarkTreeDataProvider {
         item.resourceUri = element.resource;
         item.iconPath = element.iconPath;
         item.command = element.type == NodeType.LOCATION && element.location ? {
-            command: 'inlineBookmarks.jumpToRange',
+            command: 'stickyBookmarks.jumpToRange',
             arguments: [element.location.uri, element.location.range],
             title: 'JumpTo'
         } : 0;
@@ -606,7 +619,7 @@ class InlineBookmarkTreeDataProvider {
 
 
 module.exports = {
-    InlineBookmarksCtrl: InlineBookmarksCtrl,
-    InlineBookmarkTreeDataProvider: InlineBookmarkTreeDataProvider,
+    StickyBookmarksCtrl: StickyBookmarksCtrl,
+    StickyBookmarkTreeDataProvider: StickyBookmarkTreeDataProvider,
     NodeType: NodeType
 };

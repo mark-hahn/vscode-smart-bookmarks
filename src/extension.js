@@ -1,16 +1,14 @@
 'use strict';
 /** 
- * @author github.com/tintinweb
+ * @author github.com/mark-hahn
  *  
- * 
- * 
- * */
+**/
 /** imports */
 const vscode = require('vscode');
 const settings = require('./settings');
-const {InlineBookmarksCtrl, InlineBookmarkTreeDataProvider} = require('./features/inlineBookmarks');
+const {StickyBookmarksCtrl, StickyBookmarkTreeDataProvider} = 
+                        require('./features/stickyBookmarks');
 const GitIgnore = require('./features/gitignore');
-
 
 function editorJumptoRange(range, editor) {
 
@@ -72,25 +70,25 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
 
 
 function onActivate(context) {
-    const auditTags = new InlineBookmarksCtrl(context);
-    const treeDataProvider = new InlineBookmarkTreeDataProvider(auditTags);
+    const auditTags = new StickyBookmarksCtrl(context);
+    const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
 
     var activeEditor = vscode.window.activeTextEditor;
 
     /** register views */
-    const treeView = vscode.window.createTreeView('inlineBookmarksExplorer', { treeDataProvider: treeDataProvider });
+    const treeView = vscode.window.createTreeView('stickyBookmarksExplorer', { treeDataProvider: treeDataProvider });
     /*
     context.subscriptions.push(treeView);
     */
     /*
     context.subscriptions.push(
-        vscode.window.registerTreeDataProvider("inlineBookmarksExplorer", treeDataProvider)
+        vscode.window.registerTreeDataProvider("stickyBookmarksExplorer", treeDataProvider)
     );
     */
     
     /** register commands */
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.jumpToRange", (documentUri, range) => {
+        vscode.commands.registerCommand("stickyBookmarks.jumpToRange", (documentUri, range) => {
             vscode.workspace.openTextDocument(documentUri).then(doc => {
                 vscode.window.showTextDocument(doc).then(editor => {
                     editorJumptoRange(range, editor);
@@ -99,58 +97,71 @@ function onActivate(context) {
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.refresh", () => {
+        vscode.commands.registerCommand("stickyBookmarks.refresh", () => {
             auditTags.commands.refresh();
             treeDataProvider.refresh();
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.toggleShowVisibleFilesOnly", () => {
+        vscode.commands.registerCommand("stickyBookmarks.toggleShowVisibleFilesOnly", () => {
             settings.extensionConfig().update("view.showVisibleFilesOnly", !settings.extensionConfig().view.showVisibleFilesOnly);
             auditTags.commands.refresh();
             treeDataProvider.refresh();
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.toggleViewKeepFilesExpanded", () => {
-            settings.extensionConfig().update("view.expanded", !settings.extensionConfig().view.expanded);
+        vscode.commands.registerCommand(
+            "stickyBookmarks.toggleViewKeepFilesExpanded", () => {
+             settings.extensionConfig().update("view.expanded", 
+            !settings.extensionConfig().view.expanded);
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.jumpToNext", () => {
+        vscode.commands.registerCommand("stickyBookmarks.jumpToNext", () => {
             let element;
             const lineMode = settings.extensionConfig().view.lineMode;
 
-            if (treeView.visible && treeView.selection.length && lineMode === "selected-bookmark") {
-                //treview is visible and item selected.  If lineMode, ignore the current selected bookmark and rely on "chapter" below.
+            if (treeView.visible && treeView.selection.length 
+                                 && lineMode === "selected-bookmark") {
+                //treview is visible and item selected.  
+                // If lineMode, ignore the current selected bookmark 
+                // and rely on "chapter" below.
                 element = treeView.selection[0];
             } else {
                 //no select, find nearest bookmark in editor
-                if(!activeEditor || !activeEditor.selections.length || !activeEditor.document){
+                if(!activeEditor || !activeEditor.selections.length 
+                                 || !activeEditor.document){
                     return;
                 }
-                element = editorFindNearestBookmark(activeEditor.document.uri, treeDataProvider, activeEditor.selections[0].anchor, "chapter");
+                element = editorFindNearestBookmark(
+                    activeEditor.document.uri, treeDataProvider, 
+                    activeEditor.selections[0].anchor, "chapter");
             }
             if(!element){
                 return;
             }
             let neighbors = treeDataProvider.model.getNeighbors(element);
             let target = neighbors.next;
-            if(lineMode === "current-line" && !neighbors.previous && activeEditor.selections[0].anchor.line < element.location.range.start.line){
-                // When lineMode is enabled, the chapter "next" target is almost always correct, except when the anchor is before the first bookmark
+            if(lineMode === "current-line" && !neighbors.previous 
+                && activeEditor.selections[0].anchor.line 
+                    < element.location.range.start.line){
+                // When lineMode is enabled, the chapter "next" 
+                // target is almost always correct, except when 
+                // the anchor is before the first bookmark
                 target = element;
             }
             if(target){
-                vscode.workspace.openTextDocument(target.location.uri).then(doc => {
-                    vscode.window.showTextDocument(doc).then(editor => {
-                        editorJumptoRange(target.location.range, editor);
-                    });
+                vscode.workspace.openTextDocument(target.location.uri)
+                  .then(doc => {
+                     vscode.window.showTextDocument(doc).then(editor => {
+                     editorJumptoRange(target.location.range, editor);
+                   });
                 });
             }
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.jumpToPrevious", () => {
+        vscode.commands.registerCommand("stickyBookmarks.jumpToPrevious", () => {
             let element;
             const lineMode = settings.extensionConfig().view.lineMode;
 
@@ -183,7 +194,7 @@ function onActivate(context) {
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.setTreeViewFilterWords", (words) => {
+        vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
             if(!words || !words.length){
                 //show dialog?
                 let options = {
@@ -207,38 +218,40 @@ function onActivate(context) {
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.debug.state.reset", () => {
+        vscode.commands.registerCommand("stickyBookmarks.debug.state.reset", 
+          () => {
             auditTags.resetWorkspace();
             auditTags.loadFromWorkspace();
             treeDataProvider.refresh();
-        })
+          })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.showSelectBookmark", () => {
-            auditTags.commands.showSelectBookmark();
-        })
+        vscode.commands.registerCommand(
+            "stickyBookmarks.showSelectBookmark", () => {
+               auditTags.commands.showSelectBookmark();
+            })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.showSelectVisibleBookmark", () => {
+        vscode.commands.registerCommand("stickyBookmarks.showSelectVisibleBookmark", () => {
             auditTags.commands.showSelectVisibleBookmark();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.listBookmarks", () => {
+        vscode.commands.registerCommand("stickyBookmarks.listBookmarks", () => {
             auditTags.commands.showListBookmarks();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.listVisibleBookmarks", () => {
+        vscode.commands.registerCommand("stickyBookmarks.listVisibleBookmarks", () => {
             auditTags.commands.showListVisibleBookmarks();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("inlineBookmarks.scanWorkspace", () => {
+        vscode.commands.registerCommand("stickyBookmarks.scanWorkspace", () => {
             auditTags.commands.scanWorkspaceBookmarks();
         })
     );
