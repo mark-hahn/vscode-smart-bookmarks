@@ -1,7 +1,7 @@
 {
-    "name": "vscode-inline-bookmarks",
-    "displayName": "Inline Bookmarks",
-    "description": "Customizable Inline Bookmarks",
+    "name": "vscode-sticky-bookmarks",
+    "displayName": "Sticky Bookmarks",
+    "description": "Inline Bookmark On Any Line",
     "version": "0.1.0",
     "license": "GPLv3",
     "keywords": [
@@ -17,7 +17,7 @@
         "navigation",
         "highlight"
     ],
-    "publisher": "tintinweb",
+    "publisher": "mark-hahn",
     "icon": "images/icon.png",
     "engines": {
         "vscode": "^1.20.2"
@@ -26,11 +26,11 @@
         "Other"
     ],
     "bugs": {
-        "url": "https://github.com/tintinweb/vscode-inline-bookmarks/issues"
+        "url": "https://github.com/mark-hahn/vscode-sticky-bookmarks/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/tintinweb/vscode-inline-bookmarks"
+        "url": "https://github.com/mark-hahn/vscode-sticky-bookmarks"
     },
     "activationEvents": [
         "*",
