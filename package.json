@@ -83,6 +83,15 @@
                 }
             },
             {
+                "command": "stickyBookmarks.toggleBookmark",
+                "title": "Jump to Previous",
+                "category": "StickyBookmarks",
+                "icon": {
+                    "light": "images/jump-previous.svg",
+                    "dark": "images/jump-previous-dark.svg"
+                }
+            },
+            {
                 "command": "stickyBookmarks.jumpToNext",
                 "title": "Jump to Next",
                 "category": "StickyBookmarks",

@@ -193,6 +193,43 @@ function onActivate(context) {
             }
         })
     );
+    context.subscriptions.push( /**/
+        vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
+          () => {
+            let element;
+
+            if (treeView.visible && treeView.selection.length 
+                                 && lineMode === "selected-bookmark") {
+                //treview is visible and item selected.  
+                // If lineMode, ignore the current selected bookmark 
+                // and rely on "chapter" below.
+              element = treeView.selection[0];
+            } else {  
+                //no select, find nearest bookmark in editor
+                if(!activeEditor || !activeEditor.selections.length 
+                                 || !activeEditor.document){
+                    return;
+                }
+                element = editorFindNearestBookmark(activeEditor.document.uri, treeDataProvider, activeEditor.selections[0].anchor, "chapter");
+            }
+            if(!element){
+                return;
+            }
+            let neighbors = treeDataProvider.model.getNeighbors(element);
+            let target = neighbors.previous;
+            if(lineMode === "current-line" && activeEditor.selections[0].anchor.line > element.location.range.start.line){
+                // When lineMode is enabled, the chapter "prev" target is almost always wrong, so override to "element" except when the anchor is on the same line as the bookmark
+                target = element;
+            }
+            if(target){
+                vscode.workspace.openTextDocument(target.location.uri).then(doc => {
+                    vscode.window.showTextDocument(doc).then(editor => {
+                        editorJumptoRange(target.location.range, editor);
+                    });
+                });
+            }
+        })
+    );
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
             if(!words || !words.length){
