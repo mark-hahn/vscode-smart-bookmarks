@@ -84,7 +84,7 @@
             },
             {
                 "command": "stickyBookmarks.toggleBookmark",
-                "title": "Jump to Previous",
+                "title": "Toggle Bookmark",
                 "category": "StickyBookmarks",
                 "icon": {
                     "light": "images/jump-previous.svg",

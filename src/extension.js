@@ -160,6 +160,7 @@ function onActivate(context) {
             }
         })
     );
+
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.jumpToPrevious", () => {
             let element;
@@ -193,43 +194,33 @@ function onActivate(context) {
             }
         })
     );
-    context.subscriptions.push( /**/
-        vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
-          () => {
-            let element;
+ 
+    context.subscriptions.push(
+      vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
+        () => {
+          const textEditor = vscode.window.activeTextEditor;
+          if (!textEditor) return;
 
-            if (treeView.visible && treeView.selection.length 
-                                 && lineMode === "selected-bookmark") {
-                //treview is visible and item selected.  
-                // If lineMode, ignore the current selected bookmark 
-                // and rely on "chapter" below.
-              element = treeView.selection[0];
-            } else {  
-                //no select, find nearest bookmark in editor
-                if(!activeEditor || !activeEditor.selections.length 
-                                 || !activeEditor.document){
-                    return;
-                }
-                element = editorFindNearestBookmark(activeEditor.document.uri, treeDataProvider, activeEditor.selections[0].anchor, "chapter");
-            }
-            if(!element){
-                return;
-            }
-            let neighbors = treeDataProvider.model.getNeighbors(element);
-            let target = neighbors.previous;
-            if(lineMode === "current-line" && activeEditor.selections[0].anchor.line > element.location.range.start.line){
-                // When lineMode is enabled, the chapter "prev" target is almost always wrong, so override to "element" except when the anchor is on the same line as the bookmark
-                target = element;
-            }
-            if(target){
-                vscode.workspace.openTextDocument(target.location.uri).then(doc => {
-                    vscode.window.showTextDocument(doc).then(editor => {
-                        editorJumptoRange(target.location.range, editor);
-                    });
-                });
-            }
-        })
+          const document   = textEditor.document;
+          const lineNum    = document.lineCount-1;
+
+          const textLine   = document.lineAt(lineNum-2);
+          const lineRange  = textLine.range;
+
+          const rgtChrIdx  = lineRange.end.character;
+          const lftChrIdx  = rgtChrIdx-4;
+
+          const lftPos     = new vscode.Position(lineNum, lftChrIdx);
+          const rgtPos     = new vscode.Position(lineNum, rgtChrIdx);
+          const chrRange   = new vscode.Range(lftPos, rgtPos);
+          const text       = document.getText(chrRange);
+
+          if(text === "\/\*\*\/") textEditor.edit(
+            editBuilder => editBuilder.replace(chrRange, ""));
+        }
+      )
     );
+
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
             if(!words || !words.length){
