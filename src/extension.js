@@ -201,25 +201,55 @@ function onActivate(context) {
           const textEditor = vscode.window.activeTextEditor;
           if (!textEditor) return;
 
-          const document   = textEditor.document;
-          const lineNum    = document.lineCount-1;
+          const document  = textEditor.document;
+          const lineNum   = document.lineCount-1;
+          const textLine  = document.lineAt(lineNum-1);
+          const lineText  = textLine.text;
+          let  text       = lineText.slice(lineText.length-4);
+          let  lftChrIdx;
+          if(text === "\/\*\*\/") {
+            text      = "";
+            lftChrIdx = lineText.length-4;
+          }
+          else {
+            text      = "\/\*\*\/";
+            lftChrIdx = lineText.length;
+          }
+          const rgtChrIdx = lineText.length;
+          const lftPos    = new vscode.Position(lineNum-1, lftChrIdx);
+          const rgtPos    = new vscode.Position(lineNum-1, rgtChrIdx);
+          const chrRange  = new vscode.Range(lftPos, rgtPos);
 
-          const textLine   = document.lineAt(lineNum-2);
-          const lineRange  = textLine.range;
-
-          const rgtChrIdx  = lineRange.end.character;
-          const lftChrIdx  = rgtChrIdx-4;
-
-          const lftPos     = new vscode.Position(lineNum, lftChrIdx);
-          const rgtPos     = new vscode.Position(lineNum, rgtChrIdx);
-          const chrRange   = new vscode.Range(lftPos, rgtPos);
-          const text       = document.getText(chrRange);
-
-          if(text === "\/\*\*\/") textEditor.edit(
-            editBuilder => editBuilder.replace(chrRange, ""));
+          textEditor.edit(
+            (editBuilder) => editBuilder.replace(chrRange, text));
         }
       )
     );
+
+/*
+console.log({
+  lineNum,
+  textLine ,
+  lineText ,
+  text,
+
+  lftChrIdx,
+  rgtChrIdx,
+  lftPos   ,
+  rgtPos   ,
+  chrRange ,
+});
+lineNum: 1196
+textLine: SU {a: 1195, b: '</style> <token>', c: false}
+lineText: '</style> <token>'
+text: '<token>',
+
+lftChrIdx: 9
+rgtChrIdx: 13
+lftPos:   (1195:9)
+rgtPos:   (1195:13)
+chrRange: (1195:9 -> 1195:13)
+*/
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
