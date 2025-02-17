@@ -6,6 +6,7 @@
 /** imports */
 const vscode = require('vscode');
 const settings = require('./settings');
+const storage  = require('./storage');
 const {StickyBookmarksCtrl, StickyBookmarkTreeDataProvider} = 
                         require('./features/stickyBookmarks');
 const GitIgnore = require('./features/gitignore');
@@ -67,16 +68,19 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
     return focusBookmark;
 }
 
+async function onActivate(context) {/**/
 
+    storage.init(context);
 
-function onActivate(context) {
-    const auditTags = new StickyBookmarksCtrl(context);
+    const auditTags        = new StickyBookmarksCtrl(context);
     const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
 
     var activeEditor = vscode.window.activeTextEditor;
 
     /** register views */
-    const treeView = vscode.window.createTreeView('stickyBookmarksExplorer', { treeDataProvider: treeDataProvider });
+    const treeView = vscode.window
+            .createTreeView('stickyBookmarksExplorer', 
+            {treeDataProvider});
     /*
     context.subscriptions.push(treeView);
     */
