@@ -162,7 +162,7 @@ class Commands {
     }
 }
 
-class StickyBookmarksCtrl {
+class StickyBookmarksCtrl {  /**/
     constructor(context) {
         this.context   = context;
         this.styles    = this._reLoadDecorations();
@@ -171,7 +171,8 @@ class StickyBookmarksCtrl {
         this.bookmarks = {};  // {file: {bookmark}}
         this.loadFromWorkspace();
     }
-    /** -- public -- */
+
+    /** -- public -- */  /**/
 
     hasBookmarks() {
         return !!this.bookmarks;
@@ -218,7 +219,7 @@ class StickyBookmarksCtrl {
         this.saveToWorkspace(); //update workspace
     }
 
-    /** -- private -- */
+    /** -- private -- */   /**/
 
     _extensionIsBlacklisted(fileName) {
         let ignoreList = settings.extensionConfig()
@@ -560,7 +561,7 @@ class StickyBookmarkTreeDataProvider {
         return element ? element.parent : element;
     }
 
-    getTreeItem(element) {/**/
+    getTreeItem(element) {  /**/
         if (!element) {
             return element; // undef
         }
