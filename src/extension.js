@@ -206,7 +206,7 @@ function onActivate(context) {
           const textLine  = document.lineAt(lineNum-1);
           const lineText  = textLine.text;
           let  text       = lineText.slice(lineText.length-4);
-          let  lftChrIdx;
+          let  lftChrIdx;  
           if(text === "\/\*\*\/") {
             text      = "";
             lftChrIdx = lineText.length-4;
