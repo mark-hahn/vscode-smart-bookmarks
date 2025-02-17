@@ -202,7 +202,7 @@ function onActivate(context) {
           if (!textEditor) return;
 
           const document  = textEditor.document;
-          const lineNum   = document.lineCount-1;
+          const lineNum   = textEditor.selection.start.line+1;
           const textLine  = document.lineAt(lineNum-1);
           const lineText  = textLine.text;
           let  text       = lineText.slice(lineText.length-4);
