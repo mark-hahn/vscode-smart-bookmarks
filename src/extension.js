@@ -4,12 +4,13 @@
  *  
 **/
 /** imports */
-const vscode = require('vscode');
-const settings = require('./settings');
-const keywords  = require('./keywords.js');
-const {StickyBookmarksCtrl, StickyBookmarkTreeDataProvider} = 
-                        require('./features/stickyBookmarks');
-const GitIgnore = require('./features/gitignore');
+const vscode      = require('vscode');
+const settings    = require('./settings');
+const {Languages} = require('./languages.js');
+const {StickyBookmarksCtrl, 
+       StickyBookmarkTreeDataProvider} = 
+                    require('./features/stickyBookmarks');
+const GitIgnore =   require('./features/gitignore');
 
 function editorJumptoRange(range, editor) {
 
@@ -68,12 +69,12 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
     return focusBookmark;
 }
 
-async function onActivate(context) {  /**/
+async function onActivate(context) {  //>
 
     const auditTags        = new StickyBookmarksCtrl(context);
     const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
-    const keywords         = await new keywords(context);
-    keywords.loadKeywords();
+    const languages        = new Languages(context);
+    await languages.loadLanguages();
 
     var activeEditor = vscode.window.activeTextEditor;
 

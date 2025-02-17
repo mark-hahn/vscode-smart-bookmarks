@@ -61,7 +61,7 @@ class Commands {
         this.showSelectBookmark((resFsPath) => visibleEditorUris.includes(resFsPath), "Select visible bookmarks");
     }
 
-    showListBookmarks(filter) {  /**/
+    showListBookmarks(filter) {  //>
 
         if (!vscode.window.outputChannel) {
             vscode.window.outputChannel = 
@@ -96,7 +96,7 @@ class Commands {
             return;
         }
 
-        entries.forEach(function (v, i, a) {/**/
+        entries.forEach(function (v, i, a) {//>
             var patternA = '#' + (i + 1) + '\t' + v.target.uri + 
                            '#' + (v.target.range.start.line + 1);
             var patternB = '#' + (i + 1) + '\t' + v.target.uri + 
@@ -123,7 +123,7 @@ class Commands {
               (resFsPath) => visibleEditorUris.includes(resFsPath));
     }
 
-    scanWorkspaceBookmarks() {     /**/
+    scanWorkspaceBookmarks() {     //>
 
         function arrayToSearchGlobPattern(config) {
             return Array.isArray(config) 
@@ -162,7 +162,7 @@ class Commands {
     }
 }
 
-class StickyBookmarksCtrl {  /**/
+class StickyBookmarksCtrl {  //>
     constructor(context) {
         this.context   = context;
         this.styles    = this._reLoadDecorations();
@@ -172,7 +172,7 @@ class StickyBookmarksCtrl {  /**/
         this.loadFromWorkspace();
     }
 
-    /** -- public -- */  /**/
+    /** -- public -- */  //>
 
     hasBookmarks() {
         return !!this.bookmarks;
@@ -219,7 +219,7 @@ class StickyBookmarksCtrl {  /**/
         this.saveToWorkspace(); //update workspace
     }
 
-    /** -- private -- */   /**/
+    /** -- private -- */   //>
 
     _extensionIsBlacklisted(fileName) {
         let ignoreList = settings.extensionConfig()
@@ -428,7 +428,7 @@ const NodeType = {
 };
 
 
-class StickyBookmarksDataModel {/**/
+class StickyBookmarksDataModel {//>
 
     /** treedata model */
 
@@ -561,7 +561,7 @@ class StickyBookmarkTreeDataProvider {
         return element ? element.parent : element;
     }
 
-    getTreeItem(element) {  /**/
+    getTreeItem(element) {  //>
         if (!element) {
             return element; // undef
         }
@@ -593,7 +593,7 @@ class StickyBookmarkTreeDataProvider {
         return crypto.createHash('sha1').update(JSON.stringify(o)).digest('hex');
     }
 
-    _formatLabel(label) {/**/
+    _formatLabel(label) {//>
         if (!settings.extensionConfig().view.words.hide || !label)
             return label;
         let words = Object.values(this.controller.words).flat(1);

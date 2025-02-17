@@ -7,7 +7,7 @@ This extension started as a copy of the extension [sticky-bookmarks](https://git
 
 #### Overview
 
-* Each bookmarked line has the token `/**/` at the end in plain text. Comment coloring makes this stand out.
+* Each bookmarked line has the token `//>` at the end in plain text. Comment coloring makes this stand out.
 * The toggle bookmark command adds/removes that token or you can edit it directly.
 * An icon in the gutter makes the bookmarked lines more visible.
 * Easily navigate to bookmarks from the **Sticky Bookmarks View** added to the Explorer Panel. 
