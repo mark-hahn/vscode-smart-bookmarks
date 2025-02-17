@@ -37,14 +37,16 @@ class Commands {
                 return;
             }
 
-            Object.keys(this.controller.bookmarks[uri]).forEach(cat => {
-                this.controller.bookmarks[uri][cat].forEach(b => {
-                    entries.push({
-                        label: b.text,
-                        description: fname,
-                        target: new vscode.Location(resource, b.range)
-                    });
-                });
+            Object.keys(this.controller.bookmarks[uri]).forEach(
+              (cat) => {
+                this.controller.bookmarks[uri][cat].forEach(
+                  (b) => {
+                       entries.push({
+                         label:     b.text,
+                         description: fname,
+                         target: new vscode.Location(resource, b.range)
+                       });
+                  });
             });
 
         }, this);
@@ -59,7 +61,7 @@ class Commands {
         this.showSelectBookmark((resFsPath) => visibleEditorUris.includes(resFsPath), "Select visible bookmarks");
     }
 
-    showListBookmarks(filter) {
+    showListBookmarks(filter) {  /**/
 
         if (!vscode.window.outputChannel) {
             vscode.window.outputChannel = 
@@ -70,15 +72,14 @@ class Commands {
         vscode.window.outputChannel.clear();
 
         let entries = [];
-        Object.keys(this.controller.bookmarks).forEach(uri => {
+        Object.keys(this.controller.bookmarks).forEach(
+          (uri) => {
             let resource = vscode.Uri.parse(uri).fsPath;
-            let fname = path.parse(resource).base;
+            let fname    = path.parse(resource).base;
+            if(filter && !filter(resource)) return;
 
-            if(filter && !filter(resource)){
-                return;
-            }
-
-            Object.keys(this.controller.bookmarks[uri]).forEach(cat => {
+            Object.keys(this.controller.bookmarks[uri]).forEach(
+              (cat) => {
                 this.controller.bookmarks[uri][cat].forEach(b => {
                     entries.push({
                         label: b.text,
@@ -95,9 +96,12 @@ class Commands {
             return;
         }
 
-        entries.forEach(function (v, i, a) {
-            var patternA = '#' + (i + 1) + '\t' + v.target.uri + '#' + (v.target.range.start.line + 1);
-            var patternB = '#' + (i + 1) + '\t' + v.target.uri + ':' + (v.target.range.start.line + 1) + ':' + (v.target.range.start.character + 1);
+        entries.forEach(function (v, i, a) {/**/
+            var patternA = '#' + (i + 1) + '\t' + v.target.uri + 
+                           '#' + (v.target.range.start.line + 1);
+            var patternB = '#' + (i + 1) + '\t' + v.target.uri + 
+                           ':' + (v.target.range.start.line + 1) + 
+                           ':' + (v.target.range.start.character + 1);
             var patterns = [patternA, patternB];
 
             var patternType = 0;
@@ -113,64 +117,60 @@ class Commands {
     }
 
     showListVisibleBookmarks() {
-        let visibleEditorUris = vscode.window.visibleTextEditors.map(te => te.document.uri.fsPath);
-        this.showListBookmarks((resFsPath) => visibleEditorUris.includes(resFsPath));
+        let visibleEditorUris = vscode.window.visibleTextEditors
+                                .map(te => te.document.uri.fsPath);
+        this.showListBookmarks(
+              (resFsPath) => visibleEditorUris.includes(resFsPath));
     }
 
-    scanWorkspaceBookmarks() {
+    scanWorkspaceBookmarks() {     /**/
 
         function arrayToSearchGlobPattern(config) {
-            return Array.isArray(config) ?
-                '{' + config.join(',') + '}'
+            return Array.isArray(config) 
+                ? '{' + config.join(',') + '}'
                 : (typeof config == 'string' ? config : '');
         }
 
-        var includePattern = arrayToSearchGlobPattern(settings.extensionConfig().search.includes) || '{**/*}';
-        var excludePattern = arrayToSearchGlobPattern(settings.extensionConfig().search.excludes);
+        var includePattern = arrayToSearchGlobPattern(
+              settings.extensionConfig().search.includes) || '{**/*}';
+        var excludePattern = arrayToSearchGlobPattern(
+              settings.extensionConfig().search.excludes);
         var limit = settings.extensionConfig().search.maxFiles;
 
         let that = this;
     
-        vscode.workspace.findFiles(includePattern, excludePattern, limit).then(function (files) {
-    
+        vscode.workspace
+          .findFiles(includePattern, excludePattern, limit)
+          .then(function (files) {
             if (!files || files.length === 0) {
                 console.log('No files found' );
                 return;
             }
-    
             var totalFiles = files.length;
-
             for (var i = 0; i < totalFiles; i++) {
-    
-                vscode.workspace.openTextDocument(files[i]).then((document) => {
-                    that.controller.updateBookmarks(document);
-                    //NOP
-                }, (err) => {
-                    console.error(err);
-                });
-    
+                vscode.workspace.openTextDocument(files[i])
+                  .then((document) => {
+                      that.controller.updateBookmarks(document);
+                      //NOP
+                  }, (err) => {
+                      console.error(err);
+                  });
             }
-            
         }, (err) => {
             console.error(err);
         });
     }
-
 }
 
 class StickyBookmarksCtrl {
-
     constructor(context) {
-        this.context = context;
-        this.styles = this._reLoadDecorations();
-        this.words = this._reLoadWords();
-
-        this.commands = new Commands(this);
-
+        this.context   = context;
+        this.styles    = this._reLoadDecorations();
+        this.words     = this._reLoadWords();
+        this.commands  = new Commands(this);
         this.bookmarks = {};  // {file: {bookmark}}
         this.loadFromWorkspace();
     }
-
     /** -- public -- */
 
     hasBookmarks() {
@@ -178,29 +178,25 @@ class StickyBookmarksCtrl {
     }
 
     async decorate(editor) {
-        if (!editor || !editor.document || 
-             editor.document.fileName.toLowerCase().endsWith(".json") 
-                /*|| editor.document.fileName.
-                     startsWith("extension-output-")*/) return; 
-                //decorate list of inline comments
-
-        this._clearBookmarksOfFile(editor.document);
-
-        if (this._extensionIsBlacklisted(editor.document.fileName)) return;
-
-        for (var style in this.words) {
-            if (!this.words.hasOwnProperty(style) || 
-                 this.words[style].length == 0    || 
-                 this._wordIsOnIgnoreList(this.words[style])) {
-              continue;
-            }
-            this._decorateWords(editor, this.words[style], style, 
-                    editor.document.fileName.startsWith("extension-output-")); 
-                    //don't add to bookmarks if we're decorating an 
-                    //extension-output
-        }
-
-        this.saveToWorkspace(); //update workspace
+      if (!editor || !editor.document || 
+            editor.document.fileName.toLowerCase().endsWith(".json") 
+              /*|| editor.document.fileName.
+                    startsWith("extension-output-")*/) return; 
+              //decorate list of inline comments
+      this._clearBookmarksOfFile(editor.document);
+      if (this._extensionIsBlacklisted(editor.document.fileName)) return;
+      for (var style in this.words) {
+          if (!this.words.hasOwnProperty(style) || 
+               this.words[style].length == 0    || 
+               this._wordIsOnIgnoreList(this.words[style])) {
+            continue;
+          }
+          this._decorateWords(editor, this.words[style], style, 
+                  editor.document.fileName.startsWith("extension-output-")); 
+                  //don't add to bookmarks if we're decorating an 
+                  //extension-output
+      }
+      this.saveToWorkspace(); //update workspace
     }
 
     async updateBookmarks(document) {
@@ -208,53 +204,51 @@ class StickyBookmarksCtrl {
              document.fileName.startsWith("extension-output-") || 
              document.fileName.toLowerCase().endsWith(".json")) 
           return;
-
         this._clearBookmarksOfFile(document);
-
         if (this._extensionIsBlacklisted(document.fileName)) return;
-
         for (var style in this.words) {
-            if (!this.words.hasOwnProperty(style) || this.words[style].length == 0 || this._wordIsOnIgnoreList(this.words[style])) {
+            if (!this.words.hasOwnProperty(style) || 
+                 this.words[style].length == 0    || 
+                 this._wordIsOnIgnoreList(this.words[style])) {
                 continue;
             }
-            this._updateBookmarksForWordAndStyle(document, this.words[style], style);
+            this._updateBookmarksForWordAndStyle(
+                        document, this.words[style], style);
         }
-
         this.saveToWorkspace(); //update workspace
     }
 
     /** -- private -- */
 
     _extensionIsBlacklisted(fileName) {
-        let ignoreList = settings.extensionConfig().exceptions.file.extensions.ignore;
+        let ignoreList = settings.extensionConfig()
+                        .exceptions.file.extensions.ignore;
         if (!ignoreList || ignoreList.length === 0) return false;
-        return this._commaSeparatedStringToUniqueList(ignoreList).some(ext => fileName.endsWith(ext.trim()));
+        return this._commaSeparatedStringToUniqueList(
+                           ignoreList).some(
+                           (ext) => fileName.endsWith(ext.trim()));
     }
-
     _wordIsOnIgnoreList(word) {
         let ignoreList = settings.extensionConfig().exceptions.words.ignore;
         return this._commaSeparatedStringToUniqueList(ignoreList).some(ignoreWord => word.startsWith(ignoreWord.trim()));
     }
-
     _commaSeparatedStringToUniqueList(s) {
         if (!s) return [];
-        return [...new Set(s.trim().split(',').map(e => e.trim()).filter(e => e.length))];
+        return [...new Set(
+          s.trim().split(',').map((e) => e.trim())
+           .filter(e => e.length))];
     }
-
     async _decorateWords(editor, words, style, noAdd) {
-        const decoStyle = this.styles[style].type || this.styles['default'].type;
-
+        const decoStyle = this.styles[style].type || 
+                          this.styles['default'].type;
         let locations = this._findWords(editor.document, words);
-        editor.setDecorations(decoStyle, locations);  // set decorations
-
+        editor.setDecorations(decoStyle, locations);
         if (locations.length && !noAdd)
             this._addBookmark(editor.document, style, locations);
     }
 
     async _updateBookmarksForWordAndStyle(document, words, style) {
-
         let locations = this._findWords(document, words);
-
         if (locations.length)
             this._addBookmark(document, style, locations);
     }
@@ -262,27 +256,26 @@ class StickyBookmarksCtrl {
     _findWords(document, words) {
         const text = document.getText();
         var locations = [];
-
         words.forEach(function (word) {
+          var regEx = new RegExp(word, "g");
+          let match;
+          while (match = regEx.exec(text)) {
 
-            var regEx = new RegExp(word, "g");
-            let match;
-            while (match = regEx.exec(text)) {
+              var startPos = document.positionAt(match.index);
+              var endPos = document.positionAt(match.index + 
+                              match[0].trim().length);
 
-                var startPos = document.positionAt(match.index);
-                var endPos = document.positionAt(match.index + match[0].trim().length);
+              var fullLine = 
+                    document.getWordRangeAtPosition(startPos, /(.+)$/);
 
-                var fullLine = document.getWordRangeAtPosition(startPos, /(.+)$/);
-
-                var decoration = {
-                    range: new vscode.Range(startPos, endPos),
-                    text: document.getText(new vscode.Range(startPos, fullLine.end))
-                };
-
-                locations.push(decoration);
-            }
+              var decoration = {
+                  range: new vscode.Range(startPos, endPos),
+                  text: document.getText(
+                          new vscode.Range(startPos, fullLine.end))
+              };
+              locations.push(decoration);
+          }
         });
-
         return locations;
     }
 
@@ -300,20 +293,22 @@ class StickyBookmarksCtrl {
 
     _addBookmark(document, style, locations) {
         let filename = document.uri;
-        if (!this.bookmarks.hasOwnProperty(filename)) {
+        if (!this.bookmarks.hasOwnProperty(filename))
             this.bookmarks[filename] = {};
-        }
         this.bookmarks[filename][style] = locations;
     }
 
     _reLoadWords() {
         let defaultWords = {  // style: arr(regexWords)
-            "blue": this._commaSeparatedStringToUniqueList(settings.extensionConfig().default.words.blue),
-            "purple": this._commaSeparatedStringToUniqueList(settings.extensionConfig().default.words.purple),
-            "green": this._commaSeparatedStringToUniqueList(settings.extensionConfig().default.words.green),
-            "red": this._commaSeparatedStringToUniqueList(settings.extensionConfig().default.words.red)
+            "blue": this._commaSeparatedStringToUniqueList(
+                      settings.extensionConfig().default.words.blue),
+            "purple": this._commaSeparatedStringToUniqueList(
+                      settings.extensionConfig().default.words.purple),
+            "green": this._commaSeparatedStringToUniqueList(
+                      settings.extensionConfig().default.words.green),
+            "red": this._commaSeparatedStringToUniqueList(
+                      settings.extensionConfig().default.words.red)
         };
-
         return { ...defaultWords, ...settings.extensionConfig().expert.custom.words.mapping };
     }
 
@@ -325,19 +320,19 @@ class StickyBookmarksCtrl {
     }
 
     _getDecorationStyle(decoOptions) {
-        return { type: vscode.window.createTextEditorDecorationType(decoOptions), options: decoOptions };
+        return { type: vscode.window
+                      .createTextEditorDecorationType(decoOptions), 
+                options: decoOptions };
     }
 
     _getDecorationDefaultStyle(color) {
         return this._getDecorationStyle({
             "gutterIconPath": this._getBookmarkDataUri(color),
-            "overviewRulerColor": color+"B0",   // this is safe/suitable for the defaults only.  Custom ruler color is handled below.
-            "light": {
-                "fontWeight": "bold"
-            },
-            "dark": {
-                "color": "Chocolate"
-            }
+              // this is safe/suitable for the defaults only.  
+              // Custom ruler color is handled below.
+            "overviewRulerColor": color+"B0",
+            "light": {"fontWeight": "bold"},
+            "dark":  {"color": "Chocolate"}
         })
     }
 
@@ -388,7 +383,8 @@ class StickyBookmarksCtrl {
 
     _isWorkspaceAvailable() {
         //single or multi root
-        return vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length >= 1;
+        return vscode.workspace.workspaceFolders && 
+               vscode.workspace.workspaceFolders.length >= 1;
     }
 
     resetWorkspace() {
@@ -398,7 +394,8 @@ class StickyBookmarksCtrl {
 
     saveToWorkspace() {
         if (!this._isWorkspaceAvailable()) return; //cannot save
-        this.context.workspaceState.update("bookmarks.object", JSON.stringify(this.bookmarks));
+        this.context.workspaceState.update(
+              "bookmarks.object", JSON.stringify(this.bookmarks));
     }
 
     loadFromWorkspace() {
@@ -430,7 +427,7 @@ const NodeType = {
 };
 
 
-class StickyBookmarksDataModel {
+class StickyBookmarksDataModel {/**/
 
     /** treedata model */
 
@@ -444,13 +441,19 @@ class StickyBookmarksDataModel {
         if (settings.extensionConfig().view.showVisibleFilesOnly) {
 
             let visibleEditorUris;
-            if(settings.extensionConfig().view.showVisibleFilesOnlyMode === "onlyActiveEditor") {
-                visibleEditorUris = [vscode.window.activeTextEditor.document.uri.path];
-            } else {
-                visibleEditorUris = vscode.window.visibleTextEditors.map(te => te.document.uri.path);
+            if(settings.extensionConfig()
+               .view.showVisibleFilesOnlyMode === "onlyActiveEditor") {
+              visibleEditorUris = 
+                    [vscode.window.activeTextEditor.document.uri.path];
+            } 
+            else {
+                visibleEditorUris = vscode.window
+                    .visibleTextEditors.map(te => te.document.uri.path);
             }
 
-            fileBookmarks = fileBookmarks.filter(v => visibleEditorUris.includes(vscode.Uri.parse(v).path));
+            fileBookmarks = fileBookmarks.filter(
+                (v) => visibleEditorUris.includes(
+                          vscode.Uri.parse(v).path));
         }
 
         return fileBookmarks.sort().map(v => {
@@ -532,7 +535,6 @@ class StickyBookmarksDataModel {
 }
 
 class StickyBookmarkTreeDataProvider {
-
     constructor(stickyBookmarksController) {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -549,29 +551,37 @@ class StickyBookmarkTreeDataProvider {
     /** methods */
 
     getChildren(element) {  
-        return this._filterTreeView(element ? this.model.getChildren(element) : this.model.getRoot());
+        return this._filterTreeView(element 
+                        ? this.model.getChildren(element) 
+                        : this.model.getRoot());
     }
 
     getParent(element) {
         return element ? element.parent : element;
     }
 
-    getTreeItem(element) {
+    getTreeItem(element) {/**/
         if (!element) {
             return element; // undef
         }
         let item = new vscode.TreeItem(
             this._formatLabel(element.label), 
-            element.type == NodeType.LOCATION ? 0 : settings.extensionConfig().view.expanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed
+            element.type == NodeType.LOCATION 
+              ? 0 : settings.extensionConfig().view.expanded 
+                  ? vscode.TreeItemCollapsibleState.Expanded : 
+                    vscode.TreeItemCollapsibleState.Collapsed
             );
-        item.id = element.type == NodeType.LOCATION ? this._getId(element.location) : this._getId(element.resource);
+        item.id = element.type == NodeType.LOCATION 
+                  ? this._getId(element.location) 
+                  : this._getId(element.resource);
         item.resourceUri = element.resource;
-        item.iconPath = element.iconPath;
-        item.command = element.type == NodeType.LOCATION && element.location ? {
-            command: 'stickyBookmarks.jumpToRange',
-            arguments: [element.location.uri, element.location.range],
-            title: 'JumpTo'
-        } : 0;
+        item.iconPath    = element.iconPath;
+        item.command = element.type == NodeType.LOCATION && 
+                       element.location 
+          ? {command:  'stickyBookmarks.jumpToRange',
+             arguments: [element.location.uri, element.location.range],
+             title:    'JumpTo' } 
+          : 0;
         return item;
     }
 
@@ -582,20 +592,19 @@ class StickyBookmarkTreeDataProvider {
         return crypto.createHash('sha1').update(JSON.stringify(o)).digest('hex');
     }
 
-    _formatLabel(label) {
-        if (!settings.extensionConfig().view.words.hide || !label) {
+    _formatLabel(label) {/**/
+        if (!settings.extensionConfig().view.words.hide || !label)
             return label;
-        }
         let words = Object.values(this.controller.words).flat(1);
-        return words.reduce((prevs, word) => prevs.replace(new RegExp(word, "g"), ""), label);  //replace tags in matches.
+        return words.reduce(
+          (prevs, word) => prevs.replace(new RegExp(word, "g"), ""),
+           label);  //replace tags in matches.
     }
 
     _filterTreeView(elements) {
-
         if(this.gitIgnoreHandler && this.gitIgnoreHandler.filter){
             elements = elements.filter(e => this.gitIgnoreHandler.filter(e.resource));
         }
-
         if (this.filterTreeViewWords && this.filterTreeViewWords.length) {
             elements = elements.filter(e => this.filterTreeViewWords.some(rx => new RegExp(rx, 'g').test(e.label)));
         }
@@ -618,8 +627,5 @@ class StickyBookmarkTreeDataProvider {
 }
 
 
-module.exports = {
-    StickyBookmarksCtrl: StickyBookmarksCtrl,
-    StickyBookmarkTreeDataProvider: StickyBookmarkTreeDataProvider,
-    NodeType: NodeType
-};
+module.exports = { StickyBookmarksCtrl, 
+                   StickyBookmarkTreeDataProvider, NodeType };
