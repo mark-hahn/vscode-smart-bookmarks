@@ -3,15 +3,17 @@ const fs     = vscode.workspace.fs;
 const path   = require("path");
 
 const defaultLanguages = [
-  'c-style',
-  'python',
+    "javascript", "typescript", "python", "java", 
+    "c", "cpp", "c-sharp", "go", "rust", "swift", 
+    "kotlin", "coffeescript",
 ];
 
 class Languages {  
   constructor(context) { 
     this.context = context; 
-    this.tokenBySfx    = {};
+    this.markerBySfx   = {};
     this.keywordsBySfx = {};
+    this.tokensBySfx   = {};
   }
 
   notifyError(err, fname) {
@@ -39,49 +41,51 @@ class Languages {
     }
 
     const files = await fs.readDirectory(storageUri);
+    fileLoop:
     for(const file of files) {
       const fileName = file[0];
       if(!fileName.endsWith('language.js')) continue;
       const filePath = path.join(storagePath, fileName);
       const uri = vscode.Uri.file(filePath);
       let language;
-      try {
-        language = 
-           JSON.parse((await fs.readFile(uri)).toString());
-      }
+      try { language = 
+            JSON.parse((await fs.readFile(uri)).toString())}
       catch(e) {
         this.notifyError('parsing', fileName);
         continue;
       } 
-      if(!language.token) {
-        this.notifyError('token missing', fileName);
-        continue;
-      }
-      if(!language.suffixes) {
-        this.notifyError('suffixes missing', fileName);
-        continue;
-      }
-      if(!language.keywords) {
-        this.notifyError('keywords missing', fileName);
-        continue;
+      for(const prop of 
+           ['marker', 'suffixes', 'keywords', 'tokens']) {
+        if(!language[prop]) {
+          this.notifyError(`${prop}  missing`, fileName);
+          continue fileLoop;
+        }
       }
       for(const sfx of language.suffixes) {
-        this.tokenBySfx[sfx]    = language.token;
+        this.markerBySfx[sfx]   = language.marker;
         this.keywordsBySfx[sfx] = language.keywords;
+        this.tokensBySfx[sfx]   = language.tokens;
       }
+      
       console.log({fileName, language});
     }
   }
 
-  getToken(sfx) {
-    return this.tokenBySfx[sfx];
+  getMarker(sfx) {
+    return this.markerBySfx[sfx];
   }
-  
-  isKeyword(sfx, word) {
+ isKeyword(sfx, word) {
     const keywords = this.keywordsBySfx[sfx];
     if(!keywords) return false;
     return keywords.includes(word);
   }
+
+  isToken(sfx, str) {
+    const tokens = this.tokensBySfx[sfx];
+    if(!tokens) return false;
+    return tokens.includes(str);
+  }
+  
 }
 
 module.exports = {Languages};
