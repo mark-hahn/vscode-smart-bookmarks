@@ -71,10 +71,6 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
 
 async function onActivate(context) {  //>
 
-    vscode.languages.getLanguages().then((languages) => {
-      console.log({languages});
-    }); 
-
     const auditTags        = new StickyBookmarksCtrl(context);
     const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
     const languages        = new Languages(context);

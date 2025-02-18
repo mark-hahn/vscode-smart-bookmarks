@@ -2,21 +2,6 @@ const vscode = require('vscode');
 const fs     = vscode.workspace.fs;
 const path   = require("path");
 
-const defaultLanguages = [
-    'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 
-    'python', 'java', 'c', 'cpp', 'csharp', 'go', 'rust', 'swift', 
-    'kotlin', 'coffeescript', 'shellscript', 
-
-    'bat', 'css', 'dart', 
-    'julia', 'tex', 'latex', 'bibtex', 
-    'less', 'lua', 'makefile', 'markdown', 
-    'objective-c', 'objective-cpp',
-    'perl', 'raku', 'php', 'powershell', 'jade', 
-    'r', 'razor', 'ruby', 'sql', 
-    'vb', 'xml', 'xsl', 'yaml', 'vue',
-    'csv', 'tsv', 
-];
-
 // markdown marker <!---->
 // vscode.window.activeTextEditor textEditor.document TextDocument languageId
 
@@ -24,8 +9,9 @@ class Languages {
   constructor(context) { 
     this.context = context; 
     this.markerByLanguageid   = {};
-    this.keywordsByLanguageid = {};
-    this.tokensByLanguageid   = {};
+    this.caseSensByLanguageid = {};
+    this.keywordsByLang = {};
+    this.tokensByLang   = {};
   }
 
   notifyError(err, fname) {
@@ -37,49 +23,44 @@ class Languages {
   async loadLanguages() {
     const storageUri  = this.context.globalStorageUri;
     const storagePath = storageUri.path;
-    fs.createDirectory(vscode.Uri.file(storagePath));
+    console.log({storagePath});
 
-    for(const language of defaultLanguages) {
-      const fileName  = `${language}-language.js`;
-      const languageUriPath = path.join(storagePath, fileName);
-      const languageUri = vscode.Uri.file(languageUriPath)
-      try { await fs.stat(languageUri) }
-      catch(e) {
-        const localPath = `../languages/${fileName}`;
-        const languageData = require(localPath).languageData;
-        await fs.writeFile(languageUri, 
-            Buffer.from(JSON.stringify(languageData, null, 2))); 
+    await fs.createDirectory(storageUri);
+    let files = await fs.readDirectory(storageUri);
+    if(files.length == 0) {
+      const {languagesById} = require('../default-lang.js');
+      for(const [languageId, language] of 
+                             Object.entries(languagesById)) {
+        const uriPath = path.join(storagePath, 
+                                `${languageId}-lang.json`);
+        await fs.writeFile(vscode.Uri.file(uriPath), 
+                Buffer.from(JSON.stringify(language, null, 2))); 
       }
     }
 
-    const files = await fs.readDirectory(storageUri);
-    fileLoop:
+    files = await fs.readDirectory(storageUri);
     for(const file of files) {
       const fileName = file[0];
-      if(!fileName.endsWith('language.js')) continue;
+      if(!fileName.endsWith('-lang.json')) continue;
+
+      const languageId = fileName.slice(0, -10);
       const filePath = path.join(storagePath, fileName);
       const uri = vscode.Uri.file(filePath);
       let language;
       try { language = 
-            JSON.parse((await fs.readFile(uri)).toString())}
+              JSON.parse((await fs.readFile(uri)).toString())}
       catch(e) {
         this.notifyError('parsing', fileName);
         continue;
       } 
-      for(const prop of 
-           ['marker', 'suffixes', 'keywords', 'tokens']) {
-        if(!language[prop]) {
-          this.notifyError(`${prop}  missing`, fileName);
-          continue fileLoop;
-        }
+      if(!language.marker) {
+        this.notifyError(`marker missing`, fileName);
+        continue;
       }
-      for(const languageid of language.suffixes) {
-        this.markerByLanguageid[languageid]   = language.marker;
-        this.keywordsByLanguageid[languageid] = language.keywords;
-        this.tokensByLanguageid[languageid]   = language.tokens;
-      }
-      
-      console.log({fileName, language});
+      this.markerByLanguageid[languageId]   = language.marker;
+      this.caseSensByLanguageid[languageId] = language.caseSensitive;
+      this.keywordsByLang[languageId] = new Set(language.keywords);
+      this.tokensByLang[languageId]   = new Set(language.tokens);
     }
   }
 
@@ -88,15 +69,19 @@ class Languages {
   }
 
   isKeyword(languageid, word) {
-    const keywords = this.keywordsByLanguageid[languageid];
+    const keywords = this.keywordsByLang[languageid];
     if(!keywords) return false;
-    return keywords.includes(word);
+    if(!caseSensByLanguageid[languageid])
+      word = word.toLowercase();
+    return keywords.has(word);
   }
 
-  isToken(languageid, str) {
-    const tokens = this.tokensByLanguageid[languageid];
+  isToken(languageid, tokenStr) {
+    const tokens = this.tokensByLang[languageid];
     if(!tokens) return false;
-    return tokens.includes(str);
+    if(!caseSensByLanguageid[languageid])
+      tokenStr = tokenStr.toLowercase();
+    return tokens.has(tokenStr);
   }
   
 }
