@@ -5,7 +5,7 @@ const path   = require("path");
 const defaultLanguages = [
     "javascript", "typescript", "python", "java", 
     "c", "cpp", "c-sharp", "go", "rust", "swift", 
-    "kotlin", "coffeescript",
+    "kotlin", "coffeescript", "bash",
 ];
 
 class Languages {  
