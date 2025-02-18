@@ -3,7 +3,7 @@
 
 Simple sticky bookmarks that can be placed on any line and stay associated with that line no matter how much the file is edited. Bookmarks are persistant over saves with no meta information needed. The UI follows the classic paradigm of toggling and jumping with the addition of a view in the Explorer Panel.
 
-This extension started as a copy of the extension [sticky-bookmarks](https://github.com/tintinweb/vscode-inline-bookmarks) and still has much of the code unchanged.
+This extension started as a copy of the extension [sticky-bookmarks](https://github.com/tintinweb/vscode-inline-bookmarks) and still has much of the code unchanged. 
 
 #### Overview
 
