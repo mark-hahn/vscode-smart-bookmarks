@@ -2,17 +2,20 @@ const vscode = require('vscode');
 const fs     = vscode.workspace.fs;
 const path   = require("path");
 
-const defaultLanguages = ['c-style'];
+const defaultLanguages = [
+  'c-style',
+  'python',
+];
 
 class Languages {  
   constructor(context) { 
     this.context = context; 
-    this.languages = {};
-    this.fnameFromSfxCache = {};
+    this.tokenBySfx    = {};
+    this.keywordsBySfx = {};
   }
 
   notifyError(err, fname) {
-    const msg = `Sticky Bookmark Error: ${err} in ${fname}`;
+    const msg = `Sticky Bookmark Error: ${err}, ${fname}`;
     console.error(msg);
     // notify msg  -- todo
   }
@@ -23,13 +26,13 @@ class Languages {
     fs.createDirectory(vscode.Uri.file(storagePath));
 
     for(const language of defaultLanguages) {
-      const fileName        = `${language}-language.js`;
-      const localFileName   = `./data/${fileName}`;
-      const languageData    = require(localFileName).languageData;
+      const fileName  = `${language}-language.js`;
       const languageUriPath = path.join(storagePath, fileName);
-      const languageUri     = vscode.Uri.file(languageUriPath)
+      const languageUri = vscode.Uri.file(languageUriPath)
       try { await fs.stat(languageUri) }
       catch(e) {
+        const localPath = `./data/${fileName}`;
+        const languageData = require(localPath).languageData;
         await fs.writeFile(languageUri, 
             Buffer.from(JSON.stringify(languageData, null, 2))); 
       }
@@ -41,62 +44,44 @@ class Languages {
       if(!fileName.endsWith('language.js')) continue;
       const filePath = path.join(storagePath, fileName);
       const uri = vscode.Uri.file(filePath);
-      let languageData;
+      let language;
       try {
-        languageData = 
+        language = 
            JSON.parse((await fs.readFile(uri)).toString());
       }
       catch(e) {
         this.notifyError('parsing', fileName);
         continue;
       } 
-      if(!languageData.token) {
+      if(!language.token) {
         this.notifyError('token missing', fileName);
         continue;
       }
-      if(!languageData.suffixes) {
+      if(!language.suffixes) {
         this.notifyError('suffixes missing', fileName);
         continue;
       }
-      if(!languageData.keywords) {
+      if(!language.keywords) {
         this.notifyError('keywords missing', fileName);
         continue;
       }
-      this.languages[fileName] = languageData;
-      console.log({fileName, languageData});
-    }
-  }
-
-  getLanguageFromSfx (sfx) {
-    let language = null;
-    let filename = this.fnameFromSfxCache(sfx);
-    if(filename) 
-      language = this.languages[filename];
-    else {
-      for(const [fname, lang] 
-            of Object.entries(this.languages)) {
-        if(lang.suffixes.includes(sfx)) {
-          filename = fname;
-          language = lang;
-        }
+      for(const sfx of language.suffixes) {
+        this.tokenBySfx[sfx]    = language.token;
+        this.keywordsBySfx[sfx] = language.keywords;
       }
-      if(filename)
-          this.fnameFromSfxCache(sfx) = filename;
+      console.log({fileName, language});
     }
-    return language;
   }
 
   getToken(sfx) {
-    const language = this.getLanguageFromSfx(sfx);
-    return language.token;
+    return this.tokenBySfx[sfx];
   }
   
   isKeyword(sfx, word) {
-    const language = this.getLanguageFromSfx(sfx);
-    if(!language) return false;
-    return language.keywords.includes(word);
+    const keywords = this.keywordsBySfx[sfx];
+    if(!keywords) return false;
+    return keywords.includes(word);
   }
-
 }
 
 module.exports = {Languages};
