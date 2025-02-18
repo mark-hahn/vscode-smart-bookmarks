@@ -33,7 +33,7 @@ class Languages {
       const languageUri = vscode.Uri.file(languageUriPath)
       try { await fs.stat(languageUri) }
       catch(e) {
-        const localPath = `./data/${fileName}`;
+        const localPath = `./languages/${fileName}`;
         const languageData = require(localPath).languageData;
         await fs.writeFile(languageUri, 
             Buffer.from(JSON.stringify(languageData, null, 2))); 
