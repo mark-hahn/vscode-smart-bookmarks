@@ -69,7 +69,7 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
     return focusBookmark;
 }
 
-async function onActivate(context) {  //>
+async function onActivate(context) { 
 
     const controller       = new StickyBookmarksCtrl(context);
     const treeDataProvider = new StickyBookmarkTreeDataProvider(controller);
@@ -203,20 +203,23 @@ async function onActivate(context) {  //>
       vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
         () => {
           const textEditor = vscode.window.activeTextEditor;
-          if (!textEditor) return;
+          if (!textEditor || !controller.curMarker) return;
 
           const document  = textEditor.document;
           const lineNum   = textEditor.selection.start.line+1;
           const textLine  = document.lineAt(lineNum-1);
           const lineText  = textLine.text;
-          let  text       = lineText.slice(lineText.length-4);
-          let  lftChrIdx;  
-          if(text === "\/\*\*\/") {
+          const marker    = controller.curMarker;
+          const markerLen = marker.length;
+
+          let  text = lineText.slice(lineText.length-markerLen);
+          let  lftChrIdx; 
+          if(text === marker) {
             text      = "";
-            lftChrIdx = lineText.length-4;
+            lftChrIdx = lineText.length-markerLen;
           }
           else {
-            text      = "\/\*\*\/";
+            text      = marker;
             lftChrIdx = lineText.length;
           }
           const rgtChrIdx = lineText.length;
@@ -296,7 +299,7 @@ async function onActivate(context) {  //>
     /************* module init ***************/
 
     controller.commands.refresh();
-    treeDataProvider.refresh();/**/
+    treeDataProvider.refresh();
     await languages.loadLanguages();
     onDidChange();
 

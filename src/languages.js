@@ -2,9 +2,6 @@ const vscode = require('vscode');
 const fs     = vscode.workspace.fs;
 const path   = require("path");
 
-// markdown marker <!---->
-// vscode.window.activeTextEditor textEditor.document TextDocument languageId
-
 class Languages {   
   constructor(context) { 
     this.context = context; 
