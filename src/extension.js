@@ -4,6 +4,7 @@
  *  
 **/
 /** imports */
+const path        = require('path');
 const vscode      = require('vscode');
 const settings    = require('./settings');
 const {Languages} = require('./languages.js');
@@ -120,8 +121,27 @@ async function onActivate(context) {
             !settings.extensionConfig().view.expanded);
         })
     );
+
+    const haveLanguage = ()=> {
+      if(!controller.curMarker) {
+        const editor = vscode.window.activeTextEditor;
+        const curLangId = editor.document.languageId;
+        const msg = 
+          `The language ${curLangId.toUpperCase()} ` +
+          `has no language file.  To create one ` +
+          `use the command "StickyBookmarks: ` +
+          `Edit Language File" now.`;
+        console.error(msg);
+        vscode.window.showInformationMessage(msg);
+        return false;
+      }
+      return true;
+    }
+    
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.jumpToNext", () => {
+            if (!haveLanguage()) return;
+
             let element;
             const lineMode = settings.extensionConfig().view.lineMode;
 
@@ -167,6 +187,8 @@ async function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.jumpToPrevious", () => {
+            if (!haveLanguage()) return;
+
             let element;
             const lineMode = settings.extensionConfig().view.lineMode;
 
@@ -202,11 +224,11 @@ async function onActivate(context) {
     context.subscriptions.push(
       vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
         () => {
-          const textEditor = vscode.window.activeTextEditor;
-          if (!textEditor || !controller.curMarker) return;
+          const editor = vscode.window.activeTextEditor;
+          if (!editor || !haveLanguage()) return;
 
-          const document  = textEditor.document;
-          const lineNum   = textEditor.selection.start.line+1;
+          const document  = editor.document;
+          const lineNum   = editor.selection.start.line+1;
           const textLine  = document.lineAt(lineNum-1);
           const lineText  = textLine.text;
           const marker    = controller.curMarker;
@@ -227,7 +249,7 @@ async function onActivate(context) {
           const rgtPos    = new vscode.Position(lineNum-1, rgtChrIdx);
           const chrRange  = new vscode.Range(lftPos, rgtPos);
 
-          textEditor.edit(
+          editor.edit(
             (editBuilder) => editBuilder.replace(chrRange, text));
         }
       )
@@ -331,7 +353,6 @@ async function onActivate(context) {
         const editor = vscode.window.activeTextEditor;
         onDidSave(editor);  
         const curLangId = editor.document.languageId;
-        controller.curLangId = curLangId;
         controller.curMarker = languages.getMarker(curLangId);
     }, null, context.subscriptions);
 
@@ -339,7 +360,6 @@ async function onActivate(context) {
     vscode.workspace.onDidCloseTextDocument(document => {
         onDidSave();  
         const curLangId = document.languageId;
-        controller.curLangId = curLangId;
         controller.curMarker = languages.getMarker(curLangId);
     }, null, context.subscriptions);
 
