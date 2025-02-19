@@ -1,7 +1,7 @@
 /*
   This file is only used the first time the Sticky Bookmarks extension is activated.  The data enclosed is used to create one file for each language in the vscode global extension data folder.  These language files are synced across vscode instances.
 
-  Then those language files can be easily edited.  To edit a language file, bring up any source file of that language making sure the language id (type) on the bottom right of the window is what you want.  Then execute the StickyBookmarks: Open Language File command.  The file will open in another tab.  If the file didn't exist you will get a newly created file.  The only required property is the marker.  All other fields are used for intelligent labelling.  With those empty the label will just be created by shrinking the white-space.
+  These language files can be easily edited.  To edit a language file, bring up any source file of that language making sure the language id (type) on the bottom right of the window is what you want.  Then execute the StickyBookmarks: Open Language File command.  The file will open in another tab.  If the file didn't exist you will get a newly created file.  The only required property is the marker.  All other fields are used for intelligent labelling.  With those empty the label will just be created by shrinking the white-space.
 
   If you do create a new file please submit it the Sticky Bookmarks github repo as an issue.
 */
@@ -23,13 +23,6 @@ exports.languagesById = {
       "_Static_assert", "_Thread_local",
       "#define", "#include", "#if", "#ifdef", "#ifndef", "#else", "#elif",
       "#endif", "#pragma", "#error", "#line", "#undef",
-    ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-      "<<", ">>", "<<=", ">>=", "&=", "|=", "^=",
-      "(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "->", "...",
     ],
   },
 
@@ -60,15 +53,6 @@ exports.languagesById = {
       "#endif", "#pragma", "#error", "#line", "#undef", "sizeof", "typeid",
       "alignof", "new", "delete",
     ],
-    
-    tokens: [
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-      "<<", ">>", "<<=", ">>=", "&=", "|=", "^=", "->", ".", ".*", "->*",
-      "::", "?", ":", "(", ")", "{", "}", "[", "]", ",", ";", ":", "::", 
-      ".", "->", "...", "#", "##", "{", "}", "[", "]", "(", ")", ".", "->",
-      "::", ":", ";", ",",
-    ],
   },
 
 /***********************************************************************/
@@ -83,15 +67,6 @@ exports.languagesById = {
       "super", "switch", "then", "this", "throw", "true", "try", "typeof",
       "unless", "until", "void", "when", "while", "yes", "no",
       "this", "super", "undefined",
-    ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "**", "++", "--", "=", "+=", "-=", "*=", "/=",
-      "%=", "**=", "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&",
-      "|", "^", "~", "<<", ">>", ">>>", "<<=", ">>=", ">>>=", "&=", "|=", "^=",
-      "=>", "->", "?", "?:", "@",
-      "(", ")", "{", "}", "[", "]", ",", ";", ":", "->", "=>", "...",
-      ".", "...", ",", ";", ":", "->", "=>", "?", "@", "::", 
     ],
   },
 
@@ -119,13 +94,6 @@ exports.languagesById = {
       "[Obsolete]", "[Serializable]", "[DllImport]", "[AttributeUsage]",
       "[Conditional]", "[DebuggerStepThrough]", "[Flags]", "[Required]",
     ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-      "<<", ">>", "=>", "??", "?.", "??=", "//", "/*", "///",
-      ".", "...", ",", ";", ":", "(", ")", "{", "}", "[", "]",
-    ],
   },
 
 /***********************************************************************/
@@ -140,13 +108,6 @@ exports.languagesById = {
       "switch", "type", "var", "append", "cap", "close", "complex", "copy",
       "delete", "imag", "len", "make", "new", "panic", "print", "println", 
       "real", "recover",
-    ],
-
-    tokens: [
-        "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-        "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-        "//", "/*", "*/", "<<", ">>", "&^", "&^=",
-        ".", "...", ",", ";", ":", ":=",
     ],
   },
 
@@ -167,15 +128,6 @@ exports.languagesById = {
       "@FunctionalInterface", "@SafeVarargs", "@Retention", "@Target",
       "@Documented", "@Inherited"
     ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-      "<<", ">>", ">>>", "<<=", ">>=", ">>>=", "&=", "|=", "^=",
-      "(", ")", "{", "}", "[", "]", ",", ";", ".", "::", "...",
-      ".", "...", ",", ";", ":", "(", ")", "{", "}", "[", "]",
-      "//", "/*", "/**",
-    ],
   },
 
 /***********************************************************************/
@@ -194,15 +146,6 @@ exports.languagesById = {
       "goto", "int", "long", "native", "package", "private", "protected",
       "public", "short", "synchronized", "throws", "transient", "volatile"
     ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", "===", "!==", ">", "<", ">=", "<=", "&&", "||", "!", "&",
-      "|", "^", "~", "<<", ">>", ">>>", "?", ":", "=>",
-      "(", ")", "{", "}", "[", "]", ",", ";", ".", ":", "`", "'", "\"",
-      ".", "...", ",", ";", ":", "(", ")", "{", "}", "[", "]", "`",
-      "//", "/* */",
-    ]
   },
 
 /***********************************************************************/
@@ -226,14 +169,6 @@ exports.languagesById = {
       "@JvmStatic", "@JvmOverloads", "@JvmName", "@Deprecated",
       "@Retention", "@Target", "@Suppress", "@Serializable",
     ],
-
-    tokens: [
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~",
-      "<<", ">>", ">>>", "<<=", ">>=", ">>>=", "&=", "|=", "^=", "?.", "!!", 
-      "?:", "::", "->", ".", "...", ",", ";", ":", "::", "->",
-      "//", "/*", "*/", "/**",
-    ],
   },
 
 /***********************************************************************/
@@ -248,14 +183,6 @@ exports.languagesById = {
       "while", "assert", "del", "global", "not", "with", "async", "elif",
       "if", "or", "yield", "and", "or", "not", "in", "is", 
     ],
-
-    tokens: [
-      "+", "-", "*", "/", "//", "%", "**", "==", "!=", ">", "<", ">=",
-      "<=", "=", "+=", "-=", "*=", "/=", "//=", "%=", "**=", "&", "|",
-      "^", "~", "<<", ">>", ",", ":", ".", ";", "@", "=", "->", "+=", 
-      "-=", "*=", "/=", "//=", "%=", "@=", "&=", "|=", "^=", 
-      ">>=", "<<=", "**=",
-    ]
   },
 
 /***********************************************************************/
@@ -272,14 +199,6 @@ exports.languagesById = {
       "final", "macro", "override", "priv", "typeof", "unsized", "virtual",
       "yield", "println!", "format!", "vec!", "dbg!", "todo!", "panic!",
       "drop", "print", "println", "eprint", "eprintln",
-    ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "=", "+=", "-=", "*=", "/=", "%=", "==", "!=",
-      ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^", "~", "<<", ">>",
-      "<<=", ">>=", "&=", "|=", "^=", "->", "=>", "::", "..", "..=", ":",
-      ";", ",", ".", "(", ")", "{", "}", "[", "]", ".", "...", ",", ";", 
-      ":", "::", "->", "=>", "//", "/*", "*/", "///", "/**",
     ],
   },
 
@@ -301,21 +220,6 @@ exports.languagesById = {
       "$UID", "$EUID", "$PPID", "$PWD", "$OLDPWD", "$HOME", "$SHELL", 
       "$PATH", "$IFS", "$RANDOM", "$SECONDS", "$LINENO",
     ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "**", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|", "^",
-      "~", "<<", ">>", "<<=", ">>=", "&=", "|=", "^=", "?","-eq", "-ne",
-      "-lt", "-le", "-gt", "-ge", "-z", "-n", "-d", "-e", "-f", "-r",
-      "-w", "-x", "-s", "-L", "-h", "-p", "-S", "-b", "-c", "-u", "-g",
-      "-k", "-O", "-G", "-N", "-nt", "-ot", "-ef", "-o", "-a", "!",
-      "(", ")", "{", "}", "[", "]", ",", ";", ":", "|", "&", "&&", "||",
-      "!", "=", "==", "!=", "<", ">", "<=", ">=", "<<", ">>", "<<<", ">|",
-      ">&", "<&", ";;", "|&", ";&", ";;&",
-      ".", "...", ",", ";", ":", "(", ")", "{", "}", "[", "]",
-      "$$", "$?", "$#", "$*", "$@", "$0", "$1", "$2", "$3", "$4", "$5",
-      "$6", "$7", "$8", "$9", "#",
-    ],
   },
 
 /***********************************************************************/
@@ -336,16 +240,6 @@ exports.languagesById = {
       "@testable", "#available", "#colorLiteral", "#file", "#function",
       "#line", "#selector", "#sourceLocation", "#warning",
     ],
-    
-    tokens: [
-      "+", "-", "*", "/", "%", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", ">", "<", ">=", "<=", "&&", "||", "!", "&", "|",
-      "^", "~", "<<", ">>", "<<=", ">>=", "&=", "|=", "^=", "??", "?:",
-      "->", ".", "..<", "...", "=>", "@", "#", "_",
-      "(", ")", "{", "}", "[", "]", ",", ";", ":", "::", "...",
-      ".", "...", ",", ";", ":", "::", "->",
-      "//", "/*", "*/", "/**",
-    ],
   },
 
 /***********************************************************************/
@@ -365,15 +259,6 @@ exports.languagesById = {
       "super", "switch", "symbol", "this", "throw", "true", "try", "type",
       "typeof", "undefined", "unique", "unknown", "var", "void", "while",
       "with", "yield", "instanceof", "in", "new", "delete", "void",
-    ],
-
-    tokens:[
-      "+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=",
-      "==", "!=", "===", "!==", ">", "<", ">=", "<=", "&&", "||", "!",
-      "&", "|", "^", "~", "<<", ">>", ">>>", "?", ":", "=>", 
-      "(", ")", "{", "}", "[", "]", ",", ";", ".", ":", "`", "'", "\"",
-      ".", "...", ",", ";", ":", "(", ")", "{", "}", "[", "]", "`", 
-      "//", "/* */"
     ],
   },
 }

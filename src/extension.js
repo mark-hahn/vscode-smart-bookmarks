@@ -74,7 +74,6 @@ async function onActivate(context) {  //>
     const auditTags        = new StickyBookmarksCtrl(context);
     const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
     const languages        = new Languages(context);
-    await languages.loadLanguages();
 
     var activeEditor = vscode.window.activeTextEditor;
 
@@ -294,11 +293,11 @@ async function onActivate(context) {  //>
         })
     );
 
-    
+    /************* module init ***************/
 
-    /** module init */
     auditTags.commands.refresh();
-    treeDataProvider.refresh();
+    treeDataProvider.refresh();/**/
+    await languages.loadLanguages();
     onDidChange();
 
     /** event setup */

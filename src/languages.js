@@ -11,7 +11,6 @@ class Languages {
     this.markerByLanguageid   = {};
     this.caseSensByLanguageid = {};
     this.keywordsByLang = {};
-    this.tokensByLang   = {};
   }
 
   notifyError(err, fname) {
@@ -59,7 +58,6 @@ class Languages {
       this.markerByLanguageid[languageId]   = language.marker;
       this.caseSensByLanguageid[languageId] = language.caseSensitive;
       this.keywordsByLang[languageId] = new Set(language.keywords);
-      this.tokensByLang[languageId]   = new Set(language.tokens);
     }
   }
 
@@ -74,15 +72,6 @@ class Languages {
       word = word.toLowercase();
     return keywords.has(word);
   }
-
-  isToken(languageid, tokenStr) {
-    const tokens = this.tokensByLang[languageid];
-    if(!tokens) return false;
-    if(!caseSensByLanguageid[languageid])
-      tokenStr = tokenStr.toLowercase();
-    return tokens.has(tokenStr);
-  }
-  
 }
 
 module.exports = {Languages};

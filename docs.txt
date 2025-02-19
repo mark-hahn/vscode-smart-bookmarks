@@ -37,11 +37,22 @@ remove options ...
   expert.custom.words.mapping
 
 add options ...
-  show overviewRuler option
+  show overviewRuler
   gutter color
   overviewRuler color
   jump to bookmark without selecting it
   selection list: show only ones from active file
   different sorting of bookmarks:
       a-z, creation time, or modification time.
-  
+
+todo ...
+  auto edit language file
+    on save check json parse
+  update default-lang.js when language file changes
+  pad spaces to min width
+  remove/add options
+
+intelligent placement
+  align with pug indentation
+  avoid template strings around eol
+  split vue files
