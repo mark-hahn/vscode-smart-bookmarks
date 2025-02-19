@@ -40,4 +40,8 @@ add options ...
   show overviewRuler option
   gutter color
   overviewRuler color
+  jump to bookmark without selecting it
+  selection list: show only ones from active file
+  different sorting of bookmarks:
+      a-z, creation time, or modification time.
   
