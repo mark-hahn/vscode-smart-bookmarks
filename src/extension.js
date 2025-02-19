@@ -307,8 +307,6 @@ async function onActivate(context) {  //>
         activeEditor = editor;
         if (editor) {
           onDidChange(editor);
-          this.languageId = editor.document.languageId;
-          controller.curLangId = editor.document.languageId;
         }
     }, null, context.subscriptions);
 
@@ -317,7 +315,6 @@ async function onActivate(context) {  //>
         if (vscode.window.activeTextEditor && event.document === vscode.window.activeTextEditor.document) {
           const editor = vscode.window.activeTextEditor;
           onDidChange(editor, event);
-          controller.curLangId = editor.document.languageId;
         }
     }, null, context.subscriptions);
 
@@ -330,12 +327,17 @@ async function onActivate(context) {  //>
     vscode.workspace.onDidOpenTextDocument(document => {
         const editor = vscode.window.activeTextEditor;
         onDidSave(editor);  
-        controller.curLangId = editor.document.languageId;
+        const curLangId = editor.document.languageId;
+        controller.curLangId = curLangId;
+        controller.curMarker = languages.getMarker(curLangId);
     }, null, context.subscriptions);
 
     /****** OnClose */
     vscode.workspace.onDidCloseTextDocument(document => {
         onDidSave();  
+        const curLangId = document.languageId;
+        controller.curLangId = curLangId;
+        controller.curMarker = languages.getMarker(curLangId);
     }, null, context.subscriptions);
 
     /****** onDidChangeTextEditorSelection */

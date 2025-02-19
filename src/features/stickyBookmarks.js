@@ -161,12 +161,13 @@ class Commands {
 
 class StickyBookmarksCtrl {  //>
     constructor(context) {
-        this.context   = context;
-        this.styles    = this._reLoadDecorations();
-        this.words     = this._reLoadWords();
-        this.commands  = new Commands(this);
-        this.bookmarks = {};  // {file: {bookmark}}
-        this.curLangId = null;
+        this.context      = context;
+        this.styles       = this._reLoadDecorations();
+        this.words        = this._reLoadWords();
+        this.commands     = new Commands(this);
+        this.bookmarks    = {};  // {file: {bookmark}}
+        this.curLangId    = null;
+        this.curMarker = null;
         this.loadFromWorkspace();
     }
 
