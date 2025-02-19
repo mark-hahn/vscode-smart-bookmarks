@@ -17,13 +17,12 @@ class Languages {
   notifyError(err, fname) {
     const msg = `Sticky Bookmark Error: ${err}, ${fname}`;
     console.error(msg);
-    // notify msg  -- todo
+    vscode.window.showInformationMessage(msg);
   }
 
   async loadLanguages() {
     const storageUri  = this.context.globalStorageUri;
     const storagePath = storageUri.path;
-    console.log({storagePath});
 
     await fs.createDirectory(storageUri);
     let files = await fs.readDirectory(storageUri);
@@ -71,7 +70,7 @@ class Languages {
   isKeyword(languageid, word) {
     const keywords = this.keywordsByLang[languageid];
     if(!keywords) return false;
-    if(!caseSensByLanguageid[languageid])
+    if(!(caseSensByLanguageid[languageid] ?? true))
       word = word.toLowercase();
     return keywords.has(word);
   }

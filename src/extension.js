@@ -231,31 +231,6 @@ async function onActivate(context) {  //>
       )
     );
 
-/*
-console.log({
-  lineNum,
-  textLine ,
-  lineText ,
-  text,
-
-  lftChrIdx,
-  rgtChrIdx,
-  lftPos   ,
-  rgtPos   ,
-  chrRange ,
-});
-lineNum: 1196
-textLine: SU {a: 1195, b: '</style> <token>', c: false}
-lineText: '</style> <token>'
-text: '<token>',
-
-lftChrIdx: 9
-rgtChrIdx: 13
-lftPos:   (1195:9)
-rgtPos:   (1195:13)
-chrRange: (1195:9 -> 1195:13)
-*/
-
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
             if(!words || !words.length){
