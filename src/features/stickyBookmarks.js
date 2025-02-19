@@ -27,7 +27,6 @@ class Commands {
     }
 
     showSelectBookmark(filter, placeHolder) {
-
         let entries = [];
         Object.keys(this.controller.bookmarks).forEach(uri => {
             let resource = vscode.Uri.parse(uri).fsPath;
@@ -62,7 +61,6 @@ class Commands {
     }
 
     showListBookmarks(filter) {  //>
-
         if (!vscode.window.outputChannel) {
             vscode.window.outputChannel = 
               vscode.window.createOutputChannel('stickyBookmarks');
@@ -124,7 +122,6 @@ class Commands {
     }
 
     scanWorkspaceBookmarks() {     //>
-
         function arrayToSearchGlobPattern(config) {
             return Array.isArray(config) 
                 ? '{' + config.join(',') + '}'
@@ -169,6 +166,7 @@ class StickyBookmarksCtrl {  //>
         this.words     = this._reLoadWords();
         this.commands  = new Commands(this);
         this.bookmarks = {};  // {file: {bookmark}}
+        this.curLangId = null;
         this.loadFromWorkspace();
     }
 
@@ -179,8 +177,7 @@ class StickyBookmarksCtrl {  //>
     }
 
     async decorate(editor) {
-      if (!editor || !editor.document || 
-            editor.document.fileName.toLowerCase().endsWith(".json") 
+      if (!editor || !editor.document 
               /*|| editor.document.fileName.
                     startsWith("extension-output-")*/) return; 
               //decorate list of inline comments
@@ -202,8 +199,7 @@ class StickyBookmarksCtrl {  //>
 
     async updateBookmarks(document) {
         if (!document || 
-             document.fileName.startsWith("extension-output-") || 
-             document.fileName.toLowerCase().endsWith(".json")) 
+             document.fileName.startsWith("extension-output-")) 
           return;
         this._clearBookmarksOfFile(document);
         if (this._extensionIsBlacklisted(document.fileName)) return;
@@ -428,7 +424,7 @@ const NodeType = {
 };
 
 
-class StickyBookmarksDataModel {//>
+class StickyBookmarksDataModel {
 
     /** treedata model */
 

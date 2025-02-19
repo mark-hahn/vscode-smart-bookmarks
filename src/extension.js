@@ -71,8 +71,8 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
 
 async function onActivate(context) {  //>
 
-    const auditTags        = new StickyBookmarksCtrl(context);
-    const treeDataProvider = new StickyBookmarkTreeDataProvider(auditTags);
+    const controller       = new StickyBookmarksCtrl(context);
+    const treeDataProvider = new StickyBookmarkTreeDataProvider(controller);
     const languages        = new Languages(context);
 
     var activeEditor = vscode.window.activeTextEditor;
@@ -102,14 +102,14 @@ async function onActivate(context) {  //>
     );
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.refresh", () => {
-            auditTags.commands.refresh();
+            controller.commands.refresh();
             treeDataProvider.refresh();
         })
     );
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.toggleShowVisibleFilesOnly", () => {
             settings.extensionConfig().update("view.showVisibleFilesOnly", !settings.extensionConfig().view.showVisibleFilesOnly);
-            auditTags.commands.refresh();
+            controller.commands.refresh();
             treeDataProvider.refresh();
         })
     );
@@ -243,13 +243,13 @@ async function onActivate(context) {  //>
                     value = value || "";
                     value = value.trim().split(/[\s;]+/).map(v => v.trim()).filter(v => v.length > 0);
                     treeDataProvider.setTreeViewFilterWords(value);
-                    auditTags.commands.refresh();
+                    controller.commands.refresh();
                     treeDataProvider.refresh();
                 });
             } else {
                 //arg provided - allow other extensions to set filters
                 treeDataProvider.setTreeViewFilterWords(words);
-                auditTags.commands.refresh();
+                controller.commands.refresh();
                 treeDataProvider.refresh();
             }
         })
@@ -257,72 +257,80 @@ async function onActivate(context) {  //>
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.debug.state.reset", 
           () => {
-            auditTags.resetWorkspace();
-            auditTags.loadFromWorkspace();
+            controller.resetWorkspace();
+            controller.loadFromWorkspace();
             treeDataProvider.refresh();
           })
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(
             "stickyBookmarks.showSelectBookmark", () => {
-               auditTags.commands.showSelectBookmark();
+               controller.commands.showSelectBookmark();
             })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.showSelectVisibleBookmark", () => {
-            auditTags.commands.showSelectVisibleBookmark();
+            controller.commands.showSelectVisibleBookmark();
         })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.listBookmarks", () => {
-            auditTags.commands.showListBookmarks();
+            controller.commands.showListBookmarks();
         })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.listVisibleBookmarks", () => {
-            auditTags.commands.showListVisibleBookmarks();
+            controller.commands.showListVisibleBookmarks();
         })
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("stickyBookmarks.scanWorkspace", () => {
-            auditTags.commands.scanWorkspaceBookmarks();
+            controller.commands.scanWorkspaceBookmarks();
         })
     );
 
     /************* module init ***************/
 
-    auditTags.commands.refresh();
+    controller.commands.refresh();
     treeDataProvider.refresh();/**/
     await languages.loadLanguages();
     onDidChange();
 
-    /** event setup */
+    /*************** event setup ****************/
+
     /***** OnChange */
     vscode.window.onDidChangeActiveTextEditor(editor => {
         activeEditor = editor;
         if (editor) {
-            onDidChange(editor);
+          onDidChange(editor);
+          this.languageId = editor.document.languageId;
+          controller.curLangId = editor.document.languageId;
         }
     }, null, context.subscriptions);
+
     /***** OnChange */
     vscode.workspace.onDidChangeTextDocument(event => {
         if (vscode.window.activeTextEditor && event.document === vscode.window.activeTextEditor.document) {
-            onDidChange(vscode.window.activeTextEditor, event);
+          const editor = vscode.window.activeTextEditor;
+          onDidChange(editor, event);
+          controller.curLangId = editor.document.languageId;
         }
     }, null, context.subscriptions);
-    /***** OnSave */
 
+    /***** OnSave */
     vscode.workspace.onDidSaveTextDocument(document => {
         onDidSave(vscode.window.activeTextEditor);  
     }, null, context.subscriptions);
     
     /****** OnOpen */
     vscode.workspace.onDidOpenTextDocument(document => {
-        onDidSave(vscode.window.activeTextEditor);  
+        const editor = vscode.window.activeTextEditor;
+        onDidSave(editor);  
+        controller.curLangId = editor.document.languageId;
     }, null, context.subscriptions);
 
     /****** OnClose */
@@ -339,20 +347,20 @@ async function onActivate(context) {  //>
     async function onDidChange(editor, event) {
         return new Promise((resolve,reject) => {
             if(settings.extensionConfig().enable){
-                auditTags.decorate(editor);
+                controller.decorate(editor);
             }
             treeDataProvider.refresh();
             resolve();
         });
     }
     async function onDidSave(editor) {
-        return new Promise((resolve,reject) => {
-            if(editor && settings.extensionConfig().enable){
-                auditTags.decorate(editor);
-            }
-            treeDataProvider.refresh();
-            resolve();
-        });
+      return new Promise((resolve,reject) => {
+          if(editor && settings.extensionConfig().enable) {
+              controller.decorate(editor);
+          }
+          treeDataProvider.refresh();
+          resolve();
+      });
     }
     async function onDidSelectionChange(event){
         if(!treeView.visible || !settings.extensionConfig().view.follow){
