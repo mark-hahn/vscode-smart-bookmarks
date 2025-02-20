@@ -230,34 +230,31 @@ class StickyBookmarksCtrl {
 
     async _updateBookmarksForWordAndStyle(document) {
         const curMarker = this.curMarker;
-        let locations = this._findWords(document, [curMarker]);
+        let locations = this._findWords(document);
         if (locations.length)
-            this._addBookmark(document, [curMarker], locations);
+            this._addBookmark(document, locations);
     }
 
     _findWords(document) {
-        const text = document.getText();
-        var locations = [];
-        var regEx = new RegExp(this.curMarker, "g");
-        let match;
-        while (match = regEx.exec(text)) {
-
-            var startPos = document.positionAt(match.index);
-            var endPos = document.positionAt(match.index + 
-                            match[0].trim().length);
-
-            var fullLine = 
-                  document.getWordRangeAtPosition(startPos, /(.+)$/);
-
-            var decoration = {
-                range: new vscode.Range(startPos, endPos),
-                text: document.getText(
-                        new vscode.Range(startPos, fullLine.end))
-            };
-            locations.push(decoration);
-        }
-        return locations;
-    }
+      const text = document.getText();
+      var locations = [];
+      var regEx = new RegExp(this.curMarker, "g");
+      let match;
+      while (match = regEx.exec(text)) {
+        var startPos = document.positionAt(match.index);
+        var endPos   = document.positionAt(match.index + 
+                          match[0].trim().length);
+        var fullLine = 
+              document.getWordRangeAtPosition(startPos, /(.+)$/);
+        var decoration = {
+            range: new vscode.Range(startPos, endPos),
+            text: document.getText(
+                    new vscode.Range(startPos, fullLine.end))
+        };
+        locations.push(decoration);
+      }
+      return locations;
+  }
 
     _clearBookmarksOfFile(document) {
         let filename = document.uri;
@@ -363,12 +360,13 @@ class StickyBookmarksCtrl {
         if (!this._isWorkspaceAvailable()) return; //cannot load
         this.bookmarks = JSON.parse(this.context.workspaceState.get("bookmarks.object", "{}"));
 
-        //remove all non existing files
         Object.keys(this.bookmarks).forEach(filepath => {
           if (!fs.existsSync(vscode.Uri.parse(filepath).fsPath)) {
             delete this.bookmarks[filepath];
             return;
           }
+          // rebuild range objects
+          // lost start, end, etc. when saved?
           for(const loc of this.bookmarks[filepath]) {
             loc.range = new vscode.Range(
               loc.range[0].line, loc.range[0].character, 

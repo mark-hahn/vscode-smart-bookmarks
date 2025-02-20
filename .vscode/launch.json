@@ -11,7 +11,7 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "${workspaceFolder}/tv-series-client.code-workspace",
+                // "${workspaceFolder}/tv-series-client.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         }
