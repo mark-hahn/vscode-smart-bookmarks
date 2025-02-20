@@ -365,25 +365,16 @@ class StickyBookmarksCtrl {
 
         //remove all non existing files
         Object.keys(this.bookmarks).forEach(filepath => {
-            if (!fs.existsSync(vscode.Uri.parse(filepath).fsPath)) {
-                delete this.bookmarks[filepath];
-                return;
-            }
-
-            Object.keys(this.bookmarks[filepath])
-                              .forEach(location => {
-                this.bookmarks[filepath] = 
-                  this.bookmarks[filepath]
-                      .map(decoObject => {
-                           decoObject.range = 
-                             new vscode.Range(
-                               decoObject.range[0].line, 
-                               decoObject.range[0].character, 
-                               decoObject.range[1].line, 
-                               decoObject.range[1].character);
-                        return decoObject;
-                      });
-            });
+          if (!fs.existsSync(vscode.Uri.parse(filepath).fsPath)) {
+            delete this.bookmarks[filepath];
+            return;
+          }
+          for(const loc of this.bookmarks[filepath]) {
+            loc.range = new vscode.Range(
+              loc.range[0].line, loc.range[0].character, 
+              loc.range[1].line, loc.range[1].character
+            );
+          }
         });
     }
 }
