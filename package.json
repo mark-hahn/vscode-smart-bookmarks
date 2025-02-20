@@ -256,30 +256,6 @@
                     "default": false,
                     "markdownDescription": "Hide items from the bookmark view that match an exclusion defined by a .gitignore file (requires reload)"
                 },
-                "sticky-bookmarks.default.words.red": {
-                    "category": "trigger words",
-                    "type": "string",
-                    "default": "@audit[\\s]",
-                    "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `red`."
-                },
-                "sticky-bookmarks.default.words.green": {
-                    "category": "trigger words",
-                    "type": "string",
-                    "default": "@audit\\-ok[\\s]",
-                    "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `green`."
-                },
-                "sticky-bookmarks.default.words.blue": {
-                    "category": "trigger words",
-                    "type": "string",
-                    "default": "@audit\\-info[\\s], @todo[\\s], @note[\\s], @remind[\\s], @follow-up[\\s]",
-                    "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `blue`."
-                },
-                "sticky-bookmarks.default.words.purple": {
-                    "category": "trigger words",
-                    "type": "string",
-                    "default": "@audit\\-issue[\\s]",
-                    "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `purple`."
-                },
                 "sticky-bookmarks.exceptions.words.ignore": {
                     "category": "exceptions",
                     "type": "string",
@@ -291,20 +267,6 @@
                     "type": "string",
                     "default": "",
                     "markdownDescription": "A comma-separated list of file extensions to ignore (e.g. .java)."
-                },
-                "sticky-bookmarks.expert.custom.styles": {
-                    "category": "expert",
-                    "type": "object",
-                    "default": {},
-                    "description": "Specify Custom Decoration Profiles",
-                    "properties": {}
-                },
-                "sticky-bookmarks.expert.custom.words.mapping": {
-                    "category": "expert",
-                    "type": "object",
-                    "default": {},
-                    "description": "Assigns tags/trigger words to decoration profiles",
-                    "properties": {}
                 },
                 "sticky-bookmarks.search.includes": {
                     "type": "array",
