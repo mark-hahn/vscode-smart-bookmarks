@@ -47,7 +47,8 @@ add options ...
       a-z, creation time, or modification time.
 
 todo ...
-  auto edit language file
+  use marker instead of word everywhere
+  add 'StickyBookmarks: Edit Language File' cmd
     on save check json parse
     mark lang file as bad (parse-error-c-lang.json)
   update default-lang.js when language file changes

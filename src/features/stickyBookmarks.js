@@ -60,7 +60,7 @@ class Commands {
         this.showSelectBookmark((resFsPath) => visibleEditorUris.includes(resFsPath), "Select visible bookmarks");
     }
 
-    showListBookmarks(filter) {  //>
+    showListBookmarks(filter) { 
         if (!vscode.window.outputChannel) {
             vscode.window.outputChannel = 
               vscode.window.createOutputChannel('stickyBookmarks');
@@ -121,7 +121,7 @@ class Commands {
               (resFsPath) => visibleEditorUris.includes(resFsPath));
     }
 
-    scanWorkspaceBookmarks() {     //>
+    scanWorkspaceBookmarks() {    
         function arrayToSearchGlobPattern(config) {
             return Array.isArray(config) 
                 ? '{' + config.join(',') + '}'
@@ -159,63 +159,52 @@ class Commands {
     }
 }
 
-class StickyBookmarksCtrl {  //>
+class StickyBookmarksCtrl { 
     constructor(context) {
         this.context      = context;
         this.styles       = this._reLoadDecorations();
-        this.words        = this._reLoadWords();
+        // this.words        = this._reLoadWords();
         this.commands     = new Commands(this);
         this.bookmarks    = {};  // {file: {bookmark}}
         this.curMarker = null;
         this.loadFromWorkspace();
     }
 
-    /** -- public -- */  //>
+    /** -- public -- */ 
 
     hasBookmarks() {
         return !!this.bookmarks;
     }
 
     async decorate(editor) {
-      if (!editor || !editor.document 
-              /*|| editor.document.fileName.
-                    startsWith("extension-output-")*/) return; 
-              //decorate list of inline comments
+      const marker = this.curMarker;
+      if (!editor || !editor.document || !marker ) 
+        return; 
+
+      //decorate list of inline comments
       this._clearBookmarksOfFile(editor.document);
       if (this._extensionIsBlacklisted(editor.document.fileName)) return;
-      for (var style in this.words) {
-          if (!this.words.hasOwnProperty(style) || 
-               this.words[style].length == 0    || 
-               this._wordIsOnIgnoreList(this.words[style])) {
-            continue;
-          }
-          this._decorateWords(editor, this.words[style], style, 
-                  editor.document.fileName.startsWith("extension-output-")); 
-                  //don't add to bookmarks if we're decorating an 
-                  //extension-output
-      }
+      this._decorateWords(editor, ['//>'], ['blue'], 
+             editor.document.fileName.startsWith("extension-output-")); 
+             //don't add to bookmarks if we're decorating an 
+             //extension-output
       this.saveToWorkspace(); //update workspace
     }
 
     async updateBookmarks(document) {
-        if (!document || 
+        const marker = this.controller.curMarker;
+        if (!document || !marker ||
              document.fileName.startsWith("extension-output-")) 
           return;
         this._clearBookmarksOfFile(document);
         if (this._extensionIsBlacklisted(document.fileName)) return;
-        for (var style in this.words) {
-            if (!this.words.hasOwnProperty(style) || 
-                 this.words[style].length == 0    || 
-                 this._wordIsOnIgnoreList(this.words[style])) {
-                continue;
-            }
-            this._updateBookmarksForWordAndStyle(
-                        document, this.words[style], style);
-        }
+
+        this._updateBookmarksForWordAndStyle( 
+                                  document, [marker], [blue]);
         this.saveToWorkspace(); //update workspace
     }
 
-    /** -- private -- */   //>
+    /** -- private -- */  
 
     _extensionIsBlacklisted(fileName) {
         let ignoreList = settings.extensionConfig()
@@ -229,25 +218,28 @@ class StickyBookmarksCtrl {  //>
         let ignoreList = settings.extensionConfig().exceptions.words.ignore;
         return this._commaSeparatedStringToUniqueList(ignoreList).some(ignoreWord => word.startsWith(ignoreWord.trim()));
     }
+    
     _commaSeparatedStringToUniqueList(s) {
         if (!s) return [];
         return [...new Set(
           s.trim().split(',').map((e) => e.trim())
            .filter(e => e.length))];
     }
+
     async _decorateWords(editor, words, style, noAdd) {
         const decoStyle = this.styles[style].type || 
                           this.styles['default'].type;
         let locations = this._findWords(editor.document, words);
         editor.setDecorations(decoStyle, locations);
         if (locations.length && !noAdd)
-            this._addBookmark(editor.document, style, locations);
+            this._addBookmark(editor.document, ['blue'], locations);
     }
 
     async _updateBookmarksForWordAndStyle(document, words, style) {
-        let locations = this._findWords(document, words);
+        const curMarker = this.controller.curMarker;
+        let locations = this._findWords(document, [curMarker]);
         if (locations.length)
-            this._addBookmark(document, style, locations);
+            this._addBookmark(document, [curMarker], locations);
     }
 
     _findWords(document, words) {
@@ -295,19 +287,6 @@ class StickyBookmarksCtrl {  //>
         this.bookmarks[filename][style] = locations;
     }
 
-    _reLoadWords() {
-        let defaultWords = {  // style: arr(regexWords)
-            "blue": this._commaSeparatedStringToUniqueList(
-                      settings.extensionConfig().default.words.blue),
-            "purple": this._commaSeparatedStringToUniqueList(
-                      settings.extensionConfig().default.words.purple),
-            "green": this._commaSeparatedStringToUniqueList(
-                      settings.extensionConfig().default.words.green),
-            "red": this._commaSeparatedStringToUniqueList(
-                      settings.extensionConfig().default.words.red)
-        };
-        return { ...defaultWords, ...settings.extensionConfig().expert.custom.words.mapping };
-    }
 
     _getBookmarkDataUri(color) {
         return vscode.Uri.parse(
@@ -557,7 +536,7 @@ class StickyBookmarkTreeDataProvider {
         return element ? element.parent : element;
     }
 
-    getTreeItem(element) {  //>
+    getTreeItem(element) { 
         if (!element) {
             return element; // undef
         }
