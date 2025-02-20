@@ -1,31 +1,5 @@
-
- context has State Storage, Storage Paths, and subscriptions
-
- texteditor is user ui to document (selection, scroll, etc.)
-   document provides file contents and code access to it
-   documents can be in multiple texteditors
-
-"disposable" refers to objects that manage resources 
-          requiring explicit release when no longer needed.
-    command from registerCommand is example of a disposable 
-    context.subscriptions holds disposable objects
-        disposables are cleaned up on extension exit
-
-languageId = document.languageId;
-
-controller obj
-   bookmarks, treeDataProvider
-
-bookmark {key: fileUri, value: label, description, and location}
-    fileUri = vscode.Uri.file('/path/to/file.txt');
-    fileUri.fsPath  '/path/to/file.txt'
-    label is mandatory visual, e.g. text displayed 
-    description is meta, like file path
-    Location is uri and range
-
-chg bookmark to {key: fileUri, value: marker, location}
-
-outputchannel shows terminal-like stream in output tab of terminal pane
+bugs ...
+  bookmark next/prev only works once
 
 remove options ...
   filter words
@@ -59,3 +33,31 @@ todo ...
     align with pug indentation
     avoid template strings around eol
     split vue files
+
+ context has State Storage, Storage Paths, and subscriptions
+
+ texteditor is user ui to document (selection, scroll, etc.)
+   document provides file contents and code access to it
+   documents can be in multiple texteditors
+
+"disposable" refers to objects that manage resources 
+          requiring explicit release when no longer needed.
+    command from registerCommand is example of a disposable 
+    context.subscriptions holds disposable objects
+        disposables are cleaned up on extension exit
+
+languageId = document.languageId;
+
+controller obj
+   bookmarks, treeDataProvider
+
+bookmark {key: fileUri, value: label, description, and location}
+    fileUri = vscode.Uri.file('/path/to/file.txt');
+    fileUri.fsPath  '/path/to/file.txt'
+    label is mandatory visual, e.g. text displayed 
+    description is meta, like file path
+    Location is uri and range
+
+chg bookmark to {key: fileUri, value: marker, location}
+
+outputchannel shows terminal-like stream in output tab of terminal pane
