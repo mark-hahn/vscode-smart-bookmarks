@@ -1,10 +1,5 @@
 'use strict';
-/** 
- * @author github.com/mark-hahn
- *  
- * 
- * 
- * */
+
 /** imports */
 const vscode   = require('vscode');
 const fs       = require("fs");
