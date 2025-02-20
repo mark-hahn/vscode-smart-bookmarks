@@ -1,14 +1,22 @@
 bugs ...
   bookmark next/prev only works once
 
+types 
+  lineno
+  text
+  marker
+
+features
+  types
+  groups
+  smart labels
+  view choice
+
 remove options ...
   filter words
   words.hide
-  words.<color>
   words.ignore
   file.extensions.ignore
-  expert.custom.styles
-  expert.custom.words.mapping
 
 add options ...
   min width pad spaces  *

@@ -283,61 +283,61 @@ class StickyBookmarksCtrl {
                 options: decoOptions };
     }
 
-    // _getDecorationDefaultStyle(color) {
-    //     return this._getDecorationStyle({
-    //         "gutterIconPath": this._getBookmarkDataUri(color),
-    //           // this is safe/suitable for the defaults only.  
-    //           // Custom ruler color is handled below.
-    //         "overviewRulerColor": color+"B0",
-    //         "light": {"fontWeight": "bold"},
-    //         "dark":  {"color": "Chocolate"}
-    //     })
-    // }
+    _getDecorationDefaultStyle(color) {
+        return this._getDecorationStyle({
+            "gutterIconPath": this._getBookmarkDataUri(color),
+              // this is safe/suitable for the defaults only.  
+              // Custom ruler color is handled below.
+            "overviewRulerColor": color+"B0",
+            "light": {"fontWeight": "bold"},
+            "dark":  {"color": "Chocolate"}
+        })
+    }
 
-    // _reLoadDecorations() {
-    //     const blue      = '#157EFB';
-    //     const green     = '#2FCE7C';
-    //     const purple    = '#C679E0';
-    //     const red       = '#F44336';
-    //     let styles      = {
-    //         "default":  this._getDecorationDefaultStyle(blue),
-    //         "red":      this._getDecorationDefaultStyle(red),
-    //         "blue":     this._getDecorationDefaultStyle(blue),
-    //         "green":    this._getDecorationDefaultStyle(green),
-    //         "purple":   this._getDecorationDefaultStyle(purple)
-    //     };
+    _reLoadDecorations() {
+        const blue      = '#157EFB';
+        const green     = '#2FCE7C';
+        const purple    = '#C679E0';
+        const red       = '#F44336';
+        let styles      = {
+            "default":  this._getDecorationDefaultStyle(blue),
+            "red":      this._getDecorationDefaultStyle(red),
+            "blue":     this._getDecorationDefaultStyle(blue),
+            "green":    this._getDecorationDefaultStyle(green),
+            "purple":   this._getDecorationDefaultStyle(purple)
+        };
 
-    //     let customStyles = settings.extensionConfig().expert.custom.styles;
+        let customStyles = settings.extensionConfig().expert.custom.styles;
 
-    //     for (var decoId in customStyles) {
+        for (var decoId in customStyles) {
 
-    //         if (!customStyles.hasOwnProperty(decoId)) {
-    //             continue;
-    //         }
+            if (!customStyles.hasOwnProperty(decoId)) {
+                continue;
+            }
 
-    //         let decoOptions = { ...customStyles[decoId] };
+            let decoOptions = { ...customStyles[decoId] };
 
-    //         // default to blue if neither an icon path nor an icon color is specified
-    //         if (!decoOptions.gutterIconPath) {
-    //             decoOptions.gutterIconColor = decoOptions.gutterIconColor || blue;
-    //         }
+            // default to blue if neither an icon path nor an icon color is specified
+            if (!decoOptions.gutterIconPath) {
+                decoOptions.gutterIconColor = decoOptions.gutterIconColor || blue;
+            }
 
-    //         //apply icon color if provided, otherwise fix the path
-    //         decoOptions.gutterIconPath = decoOptions.gutterIconColor ? this._getBookmarkDataUri(decoOptions.gutterIconColor) : this.context.asAbsolutePath(decoOptions.gutterIconPath);
+            //apply icon color if provided, otherwise fix the path
+            decoOptions.gutterIconPath = decoOptions.gutterIconColor ? this._getBookmarkDataUri(decoOptions.gutterIconColor) : this.context.asAbsolutePath(decoOptions.gutterIconPath);
 
-    //         //overview
-    //         if (decoOptions.overviewRulerColor) {
-    //             decoOptions.overviewRulerLane = vscode.OverviewRulerLane.Full;
-    //         }
-    //         //background color
-    //         if (decoOptions.backgroundColor) {
-    //             decoOptions.isWholeLine = true;
-    //         }
-    //         styles[decoId] = this._getDecorationStyle(decoOptions);
-    //     }
+            //overview
+            if (decoOptions.overviewRulerColor) {
+                decoOptions.overviewRulerLane = vscode.OverviewRulerLane.Full;
+            }
+            //background color
+            if (decoOptions.backgroundColor) {
+                decoOptions.isWholeLine = true;
+            }
+            styles[decoId] = this._getDecorationStyle(decoOptions);
+        }
 
-    //     return styles;
-    // }
+        return styles;
+    }
 
     _isWorkspaceAvailable() {
         //single or multi root

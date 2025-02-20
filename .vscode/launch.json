@@ -2,6 +2,23 @@
 // Use IntelliSense to learn about possible attributes.
 // Hover to view descriptions of existing attributes.
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+/*
+--extensionDevelopmentPath: Specifies the path to the folder containing your extension. Example: "--extensionDevelopmentPath=${workspaceFolder}"
+
+--inspect-brk=[port]: Enables the debugger to break on the first line of JavaScript code. Example: "--inspect-brk=9229"
+
+--user-data-dir: Specifies a directory for user data. Example: "--user-data-dir=${workspaceFolder}/.vscode-user-data"
+
+--disable-extensions: Disables all installed extensions except the one you're developing. Example: "--disable-extensions"
+
+--disable-workspace-trust: Disables workspace trust feature. Example: "--disable-workspace-trust"
+
+--no-sandbox: Disables the sandbox mode, which may be necessary for debugging in certain environments. Example: "--no-sandbox"
+
+--disable-gpu: Disables GPU hardware acceleration. Example: "--disable-gpu"
+
+--trace: Enables tracing for diagnostic purposes. Example: "--trace"
+*/
 {
 	"version": "0.2.0",
     "configurations": [
@@ -11,7 +28,9 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                // "${workspaceFolder}/tv-series-client.code-workspace",
+                // "/mnt/c/Users/mark/apps/tv-series-client",
+                "${workspaceFolder}/test/tv-series-client.code-workspace",
+                // "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ]
         }
