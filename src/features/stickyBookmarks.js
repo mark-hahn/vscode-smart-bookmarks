@@ -192,7 +192,7 @@ class StickyBookmarksCtrl {
     }
 
     async updateBookmarks(document) {
-        const marker = this.controller.curMarker;
+        const marker = this.curMarker;
         if (!document || !marker ||
              document.fileName.startsWith("extension-output-")) 
           return;
