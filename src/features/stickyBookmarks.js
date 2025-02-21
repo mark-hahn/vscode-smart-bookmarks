@@ -187,15 +187,14 @@ class StickyBookmarksCtrl {
     }
 
     async updateBookmarks(document) {
-        const marker = this.curMarker;
+        const marker = document.languageId;
         if (!document || !marker ||
              document.fileName.startsWith("extension-output-")) 
           return;
         this._clearBookmarksOfFile(document);
         if (this._extensionIsBlacklisted(document.fileName)) return;
 
-        this._updateBookmarksForWordAndStyle( 
-                                  document, [marker], [blue]);
+        this._updateBookmarksForWordAndStyle(document);
         this.saveToWorkspace(); //update workspace
     }
 
@@ -229,7 +228,6 @@ class StickyBookmarksCtrl {
     }
 
     async _updateBookmarksForWordAndStyle(document) {
-        const curMarker = this.curMarker;
         let locations = this._findWords(document);
         if (locations.length)
             this._addBookmark(document, locations);
