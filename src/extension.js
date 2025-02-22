@@ -79,17 +79,16 @@ async function onActivate(context) {
     var activeEditor = vscode.window.activeTextEditor;
 
     /** register views */
-    const treeView = vscode.window
-            .createTreeView('stickyBookmarksExplorer', 
+    const treeView = vscode.window.createTreeView(
+            'stickyBookmarksExplorer', 
             {treeDataProvider});
-    /*
-    context.subscriptions.push(treeView);
-    */
-    /*
-    context.subscriptions.push(
-        vscode.window.registerTreeDataProvider("stickyBookmarksExplorer", treeDataProvider)
-    );
-    */
+
+    // context.subscriptions.push(treeView);
+
+    // context.subscriptions.push(
+    //     vscode.window.registerTreeDataProvider(
+    //                   "stickyBookmarksExplorer", treeDataProvider)
+    // );
     
     /** register commands */
     context.subscriptions.push(

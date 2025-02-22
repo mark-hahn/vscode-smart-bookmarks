@@ -495,10 +495,11 @@ class StickyBookmarksDataModel {
 class StickyBookmarkTreeDataProvider {
     constructor(stickyBookmarksController) {
         this._onDidChangeTreeData = new vscode.EventEmitter();
-        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+        this.onDidChangeTreeData  = this._onDidChangeTreeData.event;
 
         this.controller = stickyBookmarksController;
-        this.model = new StickyBookmarksDataModel(stickyBookmarksController);
+        this.model  = new StickyBookmarksDataModel(
+                          stickyBookmarksController);
 
         this.filterTreeViewWords = [];
         this.gitIgnoreHandler = undefined;
