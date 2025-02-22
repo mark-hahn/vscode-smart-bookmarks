@@ -4,6 +4,5 @@ node_modules/
 dist/
 test/
 *.zip
-.gitignore
 vsc-extension-quickstart.md
 package-lock.json
