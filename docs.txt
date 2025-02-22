@@ -30,7 +30,7 @@ add options ...
 
 todo ...
   use marker instead of word everywhere
-  add 'StickyBookmarks: Edit Language File' cmd
+  add 'SmartBookmarks: Edit Language File' cmd
     on save check json parse
     mark lang file as bad (parse-error-c-lang.json)
   update default-lang.js when language file changes

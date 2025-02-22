@@ -1,14 +1,14 @@
 {
-    "name": "vscode-sticky-bookmarks",
-    "displayName": "Sticky Bookmarks",
-    "description": "Sticky Bookmark On Any Line",
+    "name": "vscode-smart-bookmarks",
+    "displayName": "Smart Bookmarks",
+    "description": "Smart Bookmark On Any Line",
     "version": "0.1.0",
     "license": "GPLv3",
     "keywords": [
         "bookmark",
         "bookmarks",
         "tag",
-        "sticky",
+        "smart",
         "jump",
         "mark",
         "selection",
@@ -24,183 +24,183 @@
         "Other"
     ],
     "bugs": {
-        "url": "https://github.com/mark-hahn/vscode-sticky-bookmarks/issues"
+        "url": "https://github.com/mark-hahn/vscode-smart-bookmarks/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/mark-hahn/vscode-sticky-bookmarks"
+        "url": "https://github.com/mark-hahn/vscode-smart-bookmarks"
     },
     "activationEvents": [
         "*",
-        "onView:stickyBookmarksExplorer",
-        "onCommand:stickyBookmarks.jumpToRange",
-        "onCommand:stickyBookmarks.refresh",
-        "onCommand:stickyBookmarks.toggleShowVisibleFilesOnly",
-        "onCommand:stickyBookmarks.toggleViewKeepFilesExpanded",
-        "onCommand:stickyBookmarks.debug.state.reset",
-        "onCommand:stickyBookmarks.showSelectBookmark",
-        "onCommand:stickyBookmarks.showSelectVisibleBookmark",
-        "onCommand:stickyBookmarks.listBookmarks",
-        "onCommand:stickyBookmarks.listVisibleBookmarks",
-        "onCommand:stickyBookmarks.scanWorkspace"
+        "onView:smartBookmarksExplorer",
+        "onCommand:smartBookmarks.jumpToRange",
+        "onCommand:smartBookmarks.refresh",
+        "onCommand:smartBookmarks.toggleShowVisibleFilesOnly",
+        "onCommand:smartBookmarks.toggleViewKeepFilesExpanded",
+        "onCommand:smartBookmarks.debug.state.reset",
+        "onCommand:smartBookmarks.showSelectBookmark",
+        "onCommand:smartBookmarks.showSelectVisibleBookmark",
+        "onCommand:smartBookmarks.listBookmarks",
+        "onCommand:smartBookmarks.listVisibleBookmarks",
+        "onCommand:smartBookmarks.scanWorkspace"
     ],
     "main": "./src/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "stickyBookmarks.refresh",
+                "command": "smartBookmarks.refresh",
                 "title": "Quick-Refresh View",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/refresh-light.svg",
                     "dark": "images/refresh-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.toggleShowVisibleFilesOnly",
+                "command": "smartBookmarks.toggleShowVisibleFilesOnly",
                 "title": "Toggle: Show Bookmarks for Visible Editors / All Files",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/toggle-files-light.svg",
                     "dark": "images/toggle-files-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.toggleViewKeepFilesExpanded",
+                "command": "smartBookmarks.toggleViewKeepFilesExpanded",
                 "title": "Toggle: Keep File View expanded",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": "images/toggle-expanded.svg"
             },
             {
-                "command": "stickyBookmarks.jumpToPrevious",
+                "command": "smartBookmarks.jumpToPrevious",
                 "title": "Jump to Previous",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/jump-previous.svg",
                     "dark": "images/jump-previous-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.toggleBookmark",
+                "command": "smartBookmarks.toggleBookmark",
                 "title": "Toggle Bookmark",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/jump-previous.svg",
                     "dark": "images/jump-previous-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.jumpToNext",
+                "command": "smartBookmarks.jumpToNext",
                 "title": "Jump to Next",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/jump-next.svg",
                     "dark": "images/jump-next-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.setTreeViewFilterWords",
+                "command": "smartBookmarks.setTreeViewFilterWords",
                 "title": "Filter View ...",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/filter-light.svg",
                     "dark": "images/filter-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.showSelectBookmark",
+                "command": "smartBookmarks.showSelectBookmark",
                 "title": "Select Bookmark",
-                "category": "StickyBookmarks"
+                "category": "SmartBookmarks"
             },
             {
-                "command": "stickyBookmarks.showSelectVisibleBookmark",
+                "command": "smartBookmarks.showSelectVisibleBookmark",
                 "title": "Select Visible Bookmark",
-                "category": "StickyBookmarks"
+                "category": "SmartBookmarks"
             },
             {
-                "command": "stickyBookmarks.listBookmarks",
+                "command": "smartBookmarks.listBookmarks",
                 "title": "List Bookmarks",
-                "category": "StickyBookmarks"
+                "category": "SmartBookmarks"
             },
             {
-                "command": "stickyBookmarks.listVisibleBookmarks",
+                "command": "smartBookmarks.listVisibleBookmarks",
                 "title": "List Visible Bookmarks",
-                "category": "StickyBookmarks"
+                "category": "SmartBookmarks"
             },
             {
-                "command": "stickyBookmarks.scanWorkspace",
+                "command": "smartBookmarks.scanWorkspace",
                 "title": "Scan Workspace for Bookmarks",
-                "category": "StickyBookmarks",
+                "category": "SmartBookmarks",
                 "icon": {
                     "light": "images/scan-workspace.svg",
                     "dark": "images/scan-workspace-dark.svg"
                 }
             },
             {
-                "command": "stickyBookmarks.debug.state.reset",
+                "command": "smartBookmarks.debug.state.reset",
                 "title": "Reset the internal state to fix potential problems",
-                "category": "StickyBookmarks:Debug"
+                "category": "SmartBookmarks:Debug"
             }
         ],
         "views": {
             "explorer": [
                 {
-                    "id": "stickyBookmarksExplorer",
-                    "name": "📘 Sticky Bookmarks"
+                    "id": "smartBookmarksExplorer",
+                    "name": "📘 Smart Bookmarks"
                 }
             ]
         },
         "menus": {
             "view/title": [
                 {
-                    "command": "stickyBookmarks.jumpToPrevious",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.jumpToPrevious",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "stickyBookmarks.jumpToNext",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.jumpToNext",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "stickyBookmarks.setTreeViewFilterWords",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.setTreeViewFilterWords",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@3"
                 },
                 {
-                    "command": "stickyBookmarks.toggleShowVisibleFilesOnly",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.toggleShowVisibleFilesOnly",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@4"
                 },
                 {
-                    "command": "stickyBookmarks.refresh",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.refresh",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@5"
                 },
                 {
-                    "command": "stickyBookmarks.scanWorkspace",
-                    "when": "view == stickyBookmarksExplorer",
+                    "command": "smartBookmarks.scanWorkspace",
+                    "when": "view == smartBookmarksExplorer",
                     "group": "navigation@6"
                 }
             ]
         },
         "configuration": {
             "type": "object",
-            "title": "Sticky Bookmarks",
+            "title": "Smart Bookmarks",
             "properties": {
-                "sticky-bookmarks.enable": {
+                "smart-bookmarks.enable": {
                     "category": "general",
                     "type": "boolean",
                     "default": true,
                     "description": "Enable/Disable the extension."
                 },
-                "sticky-bookmarks.view.showVisibleFilesOnly": {
+                "smart-bookmarks.view.showVisibleFilesOnly": {
                     "category": "view",
                     "type": "boolean",
                     "default": false,
                     "description": "Show bookmarks for visible editors/files only."
                 },
-                "sticky-bookmarks.view.showVisibleFilesOnlyMode": {
+                "smart-bookmarks.view.showVisibleFilesOnlyMode": {
                     "category": "view",
                     "type": "string",
                     "enum": [
@@ -210,19 +210,19 @@
                     "default": "allVisibleEditors",
                     "description": "Select 'Show Visible editors only' mode. Either show bookmarks for all visible editors or only for the currently selected editor. default: All Visible Editors"
                 },
-                "sticky-bookmarks.view.expanded": {
+                "smart-bookmarks.view.expanded": {
                     "category": "view",
                     "type": "boolean",
                     "default": false,
                     "description": "Keep File View expanded otherwise collapsed."
                 },
-                "sticky-bookmarks.view.follow": {
+                "smart-bookmarks.view.follow": {
                     "category": "view",
                     "type": "boolean",
                     "default": true,
                     "description": "Follow bookmarks while clicking in the editor window. Highlights nearest bookmarks in the bookmarks view. (see `view.followMode` to change the follow behavior)"
                 },
-                "sticky-bookmarks.view.followMode": {
+                "smart-bookmarks.view.followMode": {
                     "category": "view",
                     "type": "string",
                     "enum": [
@@ -232,7 +232,7 @@
                     "default": "nearest",
                     "markdownDescription": "Follow mode for highlighting bookmarks in the bookmarks view. **nearest** (Default): highlight nearest bookmark relative to the current selection. **chapter**: highlight nearest bookmark before or on the currently selected line."
                 },
-                "sticky-bookmarks.view.lineMode": {
+                "smart-bookmarks.view.lineMode": {
                     "category": "view",
                     "type": "string",
                     "enum": [
@@ -242,69 +242,69 @@
                     "default": "selected-bookmark",
                     "description": "Defines Jump to Next/Previous Bookmark behavior. **selected-bookmark** (Default): jump based on selected bookmark in editor. **current-line**: jump based on the current selected line number in the editor."
                 },
-                "sticky-bookmarks.view.words.hide": {
+                "smart-bookmarks.view.words.hide": {
                     "category": "view",
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Hide tags/trigger words in bookmark view if a comment was provided."
                 },
-                "sticky-bookmarks.view.exclude.gitIgnore": {
+                "smart-bookmarks.view.exclude.gitIgnore": {
                     "category": "view",
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Hide items from the bookmark view that match an exclusion defined by a .gitignore file (requires reload)"
                 },
-                "sticky-bookmarks.default.words.red": {
+                "smart-bookmarks.default.words.red": {
                     "category": "trigger words",
                     "type": "string",
                     "default": "@audit[\\s]",
                     "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `red`."
                 },
-                "sticky-bookmarks.default.words.green": {
+                "smart-bookmarks.default.words.green": {
                     "category": "trigger words",
                     "type": "string",
                     "default": "@audit\\-ok[\\s]",
                     "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `green`."
                 },
-                "sticky-bookmarks.default.words.blue": {
+                "smart-bookmarks.default.words.blue": {
                     "category": "trigger words",
                     "type": "string",
                     "default": "@audit\\-info[\\s], @todo[\\s], @note[\\s], @remind[\\s], @follow-up[\\s]",
                     "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `blue`."
                 },
-                "sticky-bookmarks.default.words.purple": {
+                "smart-bookmarks.default.words.purple": {
                     "category": "trigger words",
                     "type": "string",
                     "default": "@audit\\-issue[\\s]",
                     "markdownDescription": "A comma-separated list of tags/trigger words (regex accepted) to highlight `purple`."
                 },
-                "sticky-bookmarks.exceptions.words.ignore": {
+                "smart-bookmarks.exceptions.words.ignore": {
                     "category": "exceptions",
                     "type": "string",
                     "default": "",
-                    "markdownDescription": "A comma-separated list of tags/trigger words (`sticky-bookmarks.words`) that will not be decorated."
+                    "markdownDescription": "A comma-separated list of tags/trigger words (`smart-bookmarks.words`) that will not be decorated."
                 },
-                "sticky-bookmarks.exceptions.file.extensions.ignore": {
+                "smart-bookmarks.exceptions.file.extensions.ignore": {
                     "category": "exceptions",
                     "type": "string",
                     "default": "",
                     "markdownDescription": "A comma-separated list of file extensions to ignore (e.g. .java)."
                 },
-                "sticky-bookmarks.expert.custom.styles": {
+                "smart-bookmarks.expert.custom.styles": {
                     "category": "expert",
                     "type": "object",
                     "default": {},
                     "description": "Specify Custom Decoration Profiles",
                     "properties": {}
                 },
-                "sticky-bookmarks.expert.custom.words.mapping": {
+                "smart-bookmarks.expert.custom.words.mapping": {
                     "category": "expert",
                     "type": "object",
                     "default": {},
                     "description": "Assigns tags/trigger words to decoration profiles",
                     "properties": {}
                 },
-                "sticky-bookmarks.search.includes": {
+                "smart-bookmarks.search.includes": {
                     "type": "array",
                     "default": [
                         "**/*"
@@ -319,7 +319,7 @@
                         ]
                     }
                 },
-                "sticky-bookmarks.search.excludes": {
+                "smart-bookmarks.search.excludes": {
                     "type": "array",
                     "default": [
                         "**/.git/**",
@@ -344,7 +344,7 @@
                         ]
                     }
                 },
-                "sticky-bookmarks.search.maxFiles": {
+                "smart-bookmarks.search.maxFiles": {
                     "type": "number",
                     "default": 5120,
                     "description": "Max files for searching"

@@ -1,9 +1,9 @@
 /*
-  This file is only used the first time the Sticky Bookmarks extension is activated.  The data enclosed is used to create one file for each language in the vscode global extension data folder.  These language files are synced across vscode instances.
+  This file is only used the first time the Smart Bookmarks extension is activated.  The data enclosed is used to create one file for each language in the vscode global extension data folder.  These language files are synced across vscode instances.
 
-  These language files can be easily edited.  To edit a language file, bring up any source file of that language making sure the language id (type) on the bottom right of the window is what you want.  Then execute the StickyBookmarks: Open Language File command.  The file will open in another tab.  If the file didn't exist you will get a newly created file.  The only required property is the marker.  All other fields are used for intelligent labelling.  With those empty the label will just be created by shrinking the white-space.
+  These language files can be easily edited.  To edit a language file, bring up any source file of that language making sure the language id (type) on the bottom right of the window is what you want.  Then execute the SmartBookmarks: Open Language File command.  The file will open in another tab.  If the file didn't exist you will get a newly created file.  The only required property is the marker.  All other fields are used for intelligent labelling.  With those empty the label will just be created by shrinking the white-space.
 
-  If you do create a new file please submit it the Sticky Bookmarks github repo as an issue.
+  If you do create a new file please submit it the Smart Bookmarks github repo as an issue.
 */
 
 exports.languagesById = {

@@ -8,9 +8,9 @@ const path        = require('path');
 const vscode      = require('vscode');
 const settings    = require('./settings');
 const {Languages} = require('./languages.js');
-const {StickyBookmarksCtrl, 
-       StickyBookmarkTreeDataProvider} = 
-                    require('./features/stickyBookmarks');
+const {SmartBookmarksCtrl, 
+       SmartBookmarkTreeDataProvider} = 
+                    require('./features/smartBookmarks');
 const GitIgnore =   require('./features/gitignore');
 
 function editorJumptoRange(range, editor) {
@@ -72,27 +72,27 @@ function editorFindNearestBookmark(documentUri, treeDataProvider, anchor, overri
 
 async function onActivate(context) { 
 
-    const controller       = new StickyBookmarksCtrl(context);
-    const treeDataProvider = new StickyBookmarkTreeDataProvider(controller);
+    const controller       = new SmartBookmarksCtrl(context);
+    const treeDataProvider = new SmartBookmarkTreeDataProvider(controller);
     const languages        = new Languages(context);
 
     var activeEditor = vscode.window.activeTextEditor;
 
     /** register views */
     const treeView = vscode.window.createTreeView(
-            'stickyBookmarksExplorer', 
+            'smartBookmarksExplorer', 
             {treeDataProvider});
 
     // context.subscriptions.push(treeView);
 
     // context.subscriptions.push(
     //     vscode.window.registerTreeDataProvider(
-    //                   "stickyBookmarksExplorer", treeDataProvider)
+    //                   "smartBookmarksExplorer", treeDataProvider)
     // );
     
     /** register commands */
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.jumpToRange", (documentUri, range) => {
+        vscode.commands.registerCommand("smartBookmarks.jumpToRange", (documentUri, range) => {
             vscode.workspace.openTextDocument(documentUri).then(doc => {
                 vscode.window.showTextDocument(doc).then(editor => {
                     editorJumptoRange(range, editor);
@@ -101,13 +101,13 @@ async function onActivate(context) {
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.refresh", () => {
+        vscode.commands.registerCommand("smartBookmarks.refresh", () => {
             controller.commands.refresh();
             treeDataProvider.refresh();
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.toggleShowVisibleFilesOnly", () => {
+        vscode.commands.registerCommand("smartBookmarks.toggleShowVisibleFilesOnly", () => {
             settings.extensionConfig().update("view.showVisibleFilesOnly", !settings.extensionConfig().view.showVisibleFilesOnly);
             controller.commands.refresh();
             treeDataProvider.refresh();
@@ -115,7 +115,7 @@ async function onActivate(context) {
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(
-            "stickyBookmarks.toggleViewKeepFilesExpanded", () => {
+            "smartBookmarks.toggleViewKeepFilesExpanded", () => {
              settings.extensionConfig().update("view.expanded", 
             !settings.extensionConfig().view.expanded);
         })
@@ -128,7 +128,7 @@ async function onActivate(context) {
         const msg = 
           `The language ${curLangId.toUpperCase()} ` +
           `has no language file.  To create one ` +
-          `use the command "StickyBookmarks: ` +
+          `use the command "SmartBookmarks: ` +
           `Edit Language File" now.`;
         console.error(msg);
         vscode.window.showInformationMessage(msg);
@@ -138,7 +138,7 @@ async function onActivate(context) {
     }
     
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.jumpToNext", () => {
+        vscode.commands.registerCommand("smartBookmarks.jumpToNext", () => {
             if (!haveLanguage()) return;
 
             let element;
@@ -185,7 +185,7 @@ async function onActivate(context) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.jumpToPrevious", () => {
+        vscode.commands.registerCommand("smartBookmarks.jumpToPrevious", () => {
             if (!haveLanguage()) return;
 
             let element;
@@ -221,7 +221,7 @@ async function onActivate(context) {
     );
  
     context.subscriptions.push(
-      vscode.commands.registerCommand("stickyBookmarks.toggleBookmark", 
+      vscode.commands.registerCommand("smartBookmarks.toggleBookmark", 
         () => {
           const editor = vscode.window.activeTextEditor;
           if (!editor || !haveLanguage()) return;
@@ -255,7 +255,7 @@ async function onActivate(context) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.setTreeViewFilterWords", (words) => {
+        vscode.commands.registerCommand("smartBookmarks.setTreeViewFilterWords", (words) => {
             if(!words || !words.length){
                 //show dialog?
                 let options = {
@@ -279,7 +279,7 @@ async function onActivate(context) {
         })
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.debug.state.reset", 
+        vscode.commands.registerCommand("smartBookmarks.debug.state.reset", 
           () => {
             controller.resetWorkspace();
             controller.loadFromWorkspace();
@@ -288,31 +288,31 @@ async function onActivate(context) {
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(
-            "stickyBookmarks.showSelectBookmark", () => {
+            "smartBookmarks.showSelectBookmark", () => {
                controller.commands.showSelectBookmark();
             })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.showSelectVisibleBookmark", () => {
+        vscode.commands.registerCommand("smartBookmarks.showSelectVisibleBookmark", () => {
             controller.commands.showSelectVisibleBookmark();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.listBookmarks", () => {
+        vscode.commands.registerCommand("smartBookmarks.listBookmarks", () => {
             controller.commands.showListBookmarks();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.listVisibleBookmarks", () => {
+        vscode.commands.registerCommand("smartBookmarks.listVisibleBookmarks", () => {
             controller.commands.showListVisibleBookmarks();
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("stickyBookmarks.scanWorkspace", () => {
+        vscode.commands.registerCommand("smartBookmarks.scanWorkspace", () => {
             controller.commands.scanWorkspaceBookmarks();
         })
     );

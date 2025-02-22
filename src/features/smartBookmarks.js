@@ -46,7 +46,7 @@ class Commands {
         }, this);
 
         vscode.window.showQuickPick(entries, { placeHolder: placeHolder || 'Select bookmarks' }).then(item => {
-            vscode.commands.executeCommand("stickyBookmarks.jumpToRange", item.target.uri, item.target.range);
+            vscode.commands.executeCommand("smartBookmarks.jumpToRange", item.target.uri, item.target.range);
         });
     }
 
@@ -58,7 +58,7 @@ class Commands {
     showListBookmarks(filter) { 
         if (!vscode.window.outputChannel) {
             vscode.window.outputChannel = 
-              vscode.window.createOutputChannel('stickyBookmarks');
+              vscode.window.createOutputChannel('smartBookmarks');
         }
 
         if (!vscode.window.outputChannel) return;
@@ -154,7 +154,7 @@ class Commands {
     }
 }
 
-class StickyBookmarksCtrl { 
+class SmartBookmarksCtrl { 
     constructor(context) {
         this.context      = context;
         // this.styles       = this._reLoadDecorations();
@@ -381,7 +381,7 @@ const NodeType = {
 };
 
 
-class StickyBookmarksDataModel {
+class SmartBookmarksDataModel {
 
     /** treedata model */
 
@@ -492,14 +492,14 @@ class StickyBookmarksDataModel {
 
 }
 
-class StickyBookmarkTreeDataProvider {
-    constructor(stickyBookmarksController) {
+class SmartBookmarkTreeDataProvider {
+    constructor(smartBookmarksController) {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData  = this._onDidChangeTreeData.event;
 
-        this.controller = stickyBookmarksController;
-        this.model  = new StickyBookmarksDataModel(
-                          stickyBookmarksController);
+        this.controller = smartBookmarksController;
+        this.model  = new SmartBookmarksDataModel(
+                          smartBookmarksController);
 
         this.filterTreeViewWords = [];
         this.gitIgnoreHandler = undefined;
@@ -537,7 +537,7 @@ class StickyBookmarkTreeDataProvider {
         item.iconPath    = element.iconPath;
         item.command = element.type == NodeType.LOCATION && 
                        element.location 
-          ? {command:  'stickyBookmarks.jumpToRange',
+          ? {command:  'smartBookmarks.jumpToRange',
              arguments: [element.location.uri, element.location.range],
              title:    'JumpTo' } 
           : 0;
@@ -586,5 +586,5 @@ class StickyBookmarkTreeDataProvider {
 }
 
 
-module.exports = { StickyBookmarksCtrl, 
-                   StickyBookmarkTreeDataProvider, NodeType };
+module.exports = { SmartBookmarksCtrl, 
+                   SmartBookmarkTreeDataProvider, NodeType };

@@ -11,7 +11,7 @@ class Languages {
   }
 
   notifyError(err, fname) {
-    const msg = `Sticky Bookmark Error: ${err}, ${fname}`;
+    const msg = `Smart Bookmark Error: ${err}, ${fname}`;
     console.error(msg);
     vscode.window.showInformationMessage(msg);
   }
